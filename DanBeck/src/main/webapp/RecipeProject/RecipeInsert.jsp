@@ -34,6 +34,10 @@
 					style="height: 100px; width: 610px; resize: none;"
 					placeholder="이 레시피의 탄생배경을 적어주세요. 예) 남편의 생일을 맞아 소고기 미역국을 끓여봤어요. 어머니로부터 배운 미역국 레시피를 남편의 입맛에 맞게 고안했습니다."></textarea>
 			</div>
+			<div>
+				<img id="mainPhotoHolder" onclick="browseMainFile()" src="../projectResources/img/camera.jpg" style="width: 250px; height: 250px; cursor:pointer">
+				<input type="file" name="mainPhotoUpload" class="fileUpload" id="fileUpload1" style="display: none;">
+			</div>
 			<div class="summary_category">
 				<b>카테고리</b> <select name="select_category_1" id="select_category_1">
 					<optgroup>

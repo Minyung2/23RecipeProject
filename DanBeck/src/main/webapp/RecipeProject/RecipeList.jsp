@@ -8,7 +8,72 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>ㅎㅇ</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+<style>
+	a.button {
+	font-family: 'Gowun Dodum', sans-serif;
+	text-decoration: none;
+	background-color:	white;
+	color: black;
+	cursor : pointer;
+	text-align: center;
+	border: 2px solid #aabb97;
+	padding : 10px 20px;
+	display: inline-block;
+	margin-left: auto;
+	border-radius: 5px;
+	transition: all 0.3s ease;	
+}
 
+
+a.button:hover{
+	background:	#aabb97;
+	color: white;
+	box-shadow: 0 3px 3px 0 rgba(0,0,0,0.24), 0 3px 3px 0 rgba(0,0,0,0.19);
+}
+.pagenum {
+	font-family: 'Gowun Dodum', sans-serif;
+    padding: 3px 5px;
+    text-decoration: none;  /*  밑줄제거  */
+    cursor: pointer;
+    display: inline-block;
+	text-align:center;
+	font-size: 12pt;
+	color : black;
+	background: white;
+	border: 2px solid #aabb97;
+	border-radius: 5px;
+	transition: all 0.3s ease;
+}
+.active{
+	font-family: 'Gowun Dodum', sans-serif;
+    padding: 3px 5px;
+    text-decoration: none;  /*  밑줄제거  */
+    cursor: pointer;
+    display: inline-block;
+	text-align:center;
+	font-size: 12pt;
+	color : black;
+	background: white;
+	border : 2px solid #aabb97;
+	border-radius: 5px;
+	transition: all 0.3s ease;
+}
+
+
+
+.pagenum:hover, .active:hover{
+	background:	#aabb97;
+	color: white;
+	box-shadow: 0 3px 3px 0 rgba(0,0,0,0.24), 0 3px 3px 0 rgba(0,0,0,0.19);
+}
+
+
+.current {
+	color : #c8c8c8;
+	border : 1px solid gray;
+	background: white;
+}
+</style>
 </head>
 <body>
 <div>
@@ -23,7 +88,7 @@
 				<tr>
 						<td>${pageDto.totalCount-((pageDto.currentPage-1)*pageDto.pageSize)-stat.index}</td>
 						<td><a href="../project/recipeview.do?recipe_id=${rec.recipe_id}">${rec.recipe_name}</a></td>
-						<td>${rec.user_idx}</td>
+						<td>${rec.user_nickname}</td>
 						<td>${rec.visitCount}</td>
 				</tr>		
 					</c:forEach>

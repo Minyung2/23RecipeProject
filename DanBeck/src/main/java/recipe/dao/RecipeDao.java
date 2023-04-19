@@ -29,32 +29,33 @@ public class RecipeDao extends DBConnectpool {
 		return count;
 	}
 
+
 	public List<RecipeDto> getList(Map<String, Integer> map) {
 		List<RecipeDto> list = new ArrayList<>();
-	    String sql = "SELECT * FROM recipe_test ORDER BY recipe_id DESC LIMIT ?, ?";
-	    try {
-	        psmt = con.prepareStatement(sql);
-	        psmt.setInt(1, map.get("startNo"));
-	        psmt.setInt(2, map.get("pageSize"));
-	        rs = psmt.executeQuery();
-
-	        while (rs.next()) {
-	            RecipeDto dto = new RecipeDto();
-	            dto.setRecipe_id(rs.getString("recipe_id"));
-	            dto.setUser_idx(rs.getString("user_idx"));
-	            dto.setRecipe_name(rs.getString("recipe_name"));
-	            dto.setRecipe_desc(rs.getString("recipe_desc"));
-	            dto.setAmount_portion(rs.getString("amount_portion"));
-	            dto.setCooking_time(rs.getString("cooking_time"));
-	            dto.setDifficulty(rs.getString("difficulty"));
-	            dto.setImage_url(rs.getString("image_url"));
-	            list.add(dto);
-	        }
-	    } catch (SQLException e) {
-	        System.out.println("레시피 리스트 조회중 DB 에러");
-	        e.printStackTrace();
-	    }
-	    return list;
+		String sql = "SELECT rt.*,u.user_nickname FROM recipe_test rt,users u where u.user_idx=rt.user_idx ORDER BY recipe_id DESC LIMIT ?, ?";
+		try {
+			psmt = con.prepareStatement(sql);
+			psmt.setInt(1, map.get("startNo"));
+			psmt.setInt(2, map.get("pageSize"));
+			rs = psmt.executeQuery();
+			while (rs.next()) {
+				RecipeDto dto = new RecipeDto();
+				dto.setRecipe_id(rs.getString("recipe_id"));
+				dto.setUser_idx(rs.getString("user_idx"));
+				dto.setRecipe_name(rs.getString("recipe_name"));
+				dto.setRecipe_desc(rs.getString("recipe_desc"));
+				dto.setAmount_portion(rs.getString("amount_portion"));
+				dto.setCooking_time(rs.getString("cooking_time"));
+				dto.setDifficulty(rs.getString("difficulty"));
+				dto.setImage_url(rs.getString("image_url"));
+				dto.setUser_nickname(rs.getString("u.user_nickname"));
+				list.add(dto);
+			}
+		} catch (SQLException e) {
+			System.out.println("레시피 리스트 조회중 DB 에러");
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 	public RecipeDto detailView(String recipe_id) {

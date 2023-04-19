@@ -40,7 +40,7 @@ input[type=submit], input[type=button] {
 		<input type="password" name="password" placeholder="비밀번호 입력하세요.">
 		<input type="submit" value="Login">
 		<input type="button" value="HOME" onclick = "location.href='./'">
-	</form>
+	</form>	
 </div>
 </section>
 </body>

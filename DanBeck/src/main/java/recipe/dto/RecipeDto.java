@@ -4,6 +4,7 @@ public class RecipeDto {
 	private String recipe_id;
 	private String user_idx;
 	private String recipe_name;
+	private String user_nickname;
 	private String recipe_desc;
 	private String amount_portion;
 	private String cooking_time; 
@@ -11,6 +12,14 @@ public class RecipeDto {
 	private String image_url;
 	private int visitCount;
 	
+
+	public String getUser_nickname() {
+		return user_nickname;
+	}
+
+	public void setUser_nickname(String user_nickname) {
+		this.user_nickname = user_nickname;
+	}
 
 	public int getVisitCount() {
 		return visitCount;
