@@ -40,8 +40,8 @@
 			<h3>${recipeDto.recipe_name}</h3>
 			<div class="summary_in">${recipeDto.recipe_desc}</div>
 			<div class="summary_info">
-				<span>${recipeDto.amount_portion}</span>&nbsp&nbsp <span>${recipeDto.cooking_time}</span>&nbsp&nbsp
-				<span>${recipeDto.difficulty}</span>
+				<span>${recipeDto.recipe_people}</span>&nbsp&nbsp <span>${recipeDto.recipe_time}</span>&nbsp&nbsp
+				<span>${recipeDto.recipe_difficulty}</span>
 			</div>
 
 			<div class="recipe_ingredient">
@@ -60,7 +60,7 @@
 								<span>양념</span>
 							</c:if> --%>
 							<li style="list-style-type: none;">${ingre.ingredient_name}</li>
-							<li style="list-style-type: none;">${ingre.amount}</li>
+							<li style="list-style-type: none;">${ingre.ingredient_amount}</li>
 							<hr class="divider"/>
 						</c:forEach>
 					</ul>
@@ -98,7 +98,7 @@
 					</c:forEach>
 				</div>
 				<div class="writeReview">
-					<a href="../project/recipeview.do"><button type="button" class="btn btn-outline-secondary">리뷰 작성하기</button></a>
+					<a href="../project/recipeview.do"><button type="button" id="writeReview" class="btn btn-outline-secondary">리뷰 작성하기</button></a>
 				</div>
 			</div>
 			<br> <br>
@@ -132,6 +132,14 @@
 	</div>
 	
 	<script>
+	$(function(){
+	    $('#writeReview').on('click',function(){
+	        var userNick = '${sessionScope.user.user_nickname}';
+	        var url = '../project/reviewWrite.do?user_nickname=' + userNick; // GET 파라미터를 만듭니다.
+	        window.open(url, '리뷰 작성', 'width=700, height=600, left=100, top=50, scrollbar=yes, resizable=yes');
+	    });
+	});
+	
 	$(document).ready(function() {
 		  $('#comment_submit').click(function() {
 		    var comment_content = $('.form-control').val();

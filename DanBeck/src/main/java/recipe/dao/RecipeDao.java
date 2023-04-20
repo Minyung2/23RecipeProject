@@ -15,7 +15,7 @@ public class RecipeDao extends DBConnectpool {
 
 	public int getCount() {
 		int count = 0;
-		String sql = "select count(*) from recipe_test";
+		String sql = "select count(*) from recipe";
 		try {
 			psmt = con.prepareStatement(sql);
 			rs = psmt.executeQuery();
@@ -32,7 +32,7 @@ public class RecipeDao extends DBConnectpool {
 
 	public List<RecipeDto> getList(Map<String, Integer> map) {
 		List<RecipeDto> list = new ArrayList<>();
-		String sql = "SELECT rt.*,u.user_nickname FROM recipe_test rt,users u where u.user_idx=rt.user_idx ORDER BY recipe_id DESC LIMIT ?, ?";
+		String sql = "SELECT rt.*,u.user_nickname FROM recipe rt,users u where u.user_idx=rt.user_idx ORDER BY recipe_id DESC LIMIT ?, ?";
 		try {
 			psmt = con.prepareStatement(sql);
 			psmt.setInt(1, map.get("startNo"));
@@ -44,10 +44,10 @@ public class RecipeDao extends DBConnectpool {
 				dto.setUser_idx(rs.getString("user_idx"));
 				dto.setRecipe_name(rs.getString("recipe_name"));
 				dto.setRecipe_desc(rs.getString("recipe_desc"));
-				dto.setAmount_portion(rs.getString("amount_portion"));
-				dto.setCooking_time(rs.getString("cooking_time"));
-				dto.setDifficulty(rs.getString("difficulty"));
-				dto.setImage_url(rs.getString("image_url"));
+				dto.setRecipe_people(rs.getString("recipe_people"));
+				dto.setRecipe_time(rs.getString("recipe_time"));
+				dto.setRecipe_difficulty(rs.getString("recipe_difficulty"));
+				dto.setRecipe_image_url(rs.getString("recipe_image_url"));
 				dto.setUser_nickname(rs.getString("u.user_nickname"));
 				list.add(dto);
 			}
@@ -60,7 +60,7 @@ public class RecipeDao extends DBConnectpool {
 
 	public RecipeDto detailView(String recipe_id) {
 		RecipeDto dto = new RecipeDto();
-		String sql = "select * from recipe_test where recipe_id=?";
+		String sql = "select * from recipe where recipe_id=?";
 		try {
 			psmt = con.prepareStatement(sql);
 			psmt.setString(1, recipe_id);
@@ -69,10 +69,10 @@ public class RecipeDao extends DBConnectpool {
 				dto.setRecipe_id(rs.getString("recipe_id"));
 				dto.setRecipe_name(rs.getString("recipe_name"));
 				dto.setRecipe_desc(rs.getString("recipe_desc"));
-				dto.setAmount_portion(rs.getString("amount_portion"));
-				dto.setCooking_time(rs.getString("cooking_time"));
-				dto.setDifficulty(rs.getString("difficulty"));
-				dto.setImage_url(rs.getString("image_url"));
+				dto.setRecipe_people(rs.getString("recipe_people"));
+				dto.setRecipe_time(rs.getString("recipe_time"));
+				dto.setRecipe_time(rs.getString("recipe_time"));
+				dto.setRecipe_image_url("recipe_image_url");
 			}
 		} catch (Exception e) {
 			System.out.println("상세보기 불러오기 중 DB 오류");
@@ -82,7 +82,7 @@ public class RecipeDao extends DBConnectpool {
 	}
 
 	public List<String> suggestionKeyword(String recipe_name) {
-		String sql = "select recipe_name from recipe_test where recipe_name like concat('%" + recipe_name + "%')";
+		String sql = "select recipe_name from recipe where recipe_name like concat('%" + recipe_name + "%')";
 		List<String> list = new ArrayList<>();
 		try {
 			psmt = con.prepareStatement(sql);
@@ -99,16 +99,16 @@ public class RecipeDao extends DBConnectpool {
 
 	public int insertRecipe(RecipeDto dto) {
 		int result = 0;
-		String sql = "insert into recipe_test (user_idx,recipe_name,recipe_desc,amount_portion,cooking_time,difficulty,image_url) values(?,?,?,?,?,?,?)";
+		String sql = "insert into recipe (user_idx,recipe_name,recipe_desc,recipe_people,recipe_time,recipe_difficulty,recipe_image_url) values(?,?,?,?,?,?,?)";
 		try {
 			psmt = con.prepareStatement(sql);
 			psmt.setString(1, dto.getUser_idx());
 			psmt.setString(2, dto.getRecipe_name());
 			psmt.setString(3, dto.getRecipe_desc());
-			psmt.setString(4, dto.getAmount_portion());
-			psmt.setString(5, dto.getCooking_time());
-			psmt.setString(6, dto.getDifficulty());
-			psmt.setString(7, dto.getImage_url());
+			psmt.setString(4, dto.getRecipe_people());
+			psmt.setString(5, dto.getRecipe_time());
+			psmt.setString(6, dto.getRecipe_difficulty());
+			psmt.setString(7, dto.getRecipe_image_url());
 			result = psmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("실패");
@@ -119,7 +119,7 @@ public class RecipeDao extends DBConnectpool {
 
 	public String getLastRecipeId() {
 		String lastIndex = "";
-		String sql = "SELECT recipe_id FROM recipe_test WHERE recipe_id = (SELECT MAX(recipe_id) FROM recipe_test)";
+		String sql = "SELECT recipe_id FROM recipe WHERE recipe_id = (SELECT MAX(recipe_id) FROM recipe)";
 		try {
 			psmt = con.prepareStatement(sql);
 			rs = psmt.executeQuery();

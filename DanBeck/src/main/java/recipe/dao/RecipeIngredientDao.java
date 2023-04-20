@@ -22,7 +22,7 @@ public class RecipeIngredientDao extends DBConnectpool {
 				RecipeIngredientDto dto = new RecipeIngredientDto();
 				dto.setRecipe_id(rs.getString("recipe_id"));
 				dto.setIngredient_name(rs.getString("ingredient_name"));
-				dto.setAmount(rs.getString("amount"));
+				dto.setIngredient_amount(rs.getString("ingredient_amount"));
 				list.add(dto);
 			}
 		} catch (Exception e) {
@@ -34,12 +34,12 @@ public class RecipeIngredientDao extends DBConnectpool {
 	
 	
 	public void insertIngredient(RecipeIngredientDto dto) {
-		String sql = "insert into recipe_ingredient(recipe_id,ingredient_name,amount) values(?,?,?)";
+		String sql = "insert into recipe_ingredient(recipe_id,ingredient_name,ingredient_amount) values(?,?,?)";
 		try {
 			psmt=con.prepareStatement(sql);
 			psmt.setString(1, dto.getRecipe_id());
 			psmt.setString(2, dto.getIngredient_name());
-			psmt.setString(3, dto.getAmount());
+			psmt.setString(3, dto.getIngredient_amount());
 			psmt.executeUpdate();
 		} catch (Exception e) {
 			System.out.println("재료 DB 입력중 에러");

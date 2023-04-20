@@ -7,21 +7,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>회원가입</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Gugi&display=swap');
-</style>
-<link rel="stylesheet" href="./resources/css/join.css" > 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+<!-- <link rel="stylesheet" href="./resources/css/join.css" >  -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <style type="text/css">
-@import url('https://fonts.googleapis.com/css2?family=Gugi&display=swap');
 body{
 	margin:0;
 	padding:0;
 	box-sizing: border-box;
 }
 
-table{
-	font-family : 'Gugi', cursive;
+table{	
 	font-size : 1.0em;
 	background-color: rgba(220,237,200,0.35);
 	color: #aabb97;
@@ -62,76 +58,41 @@ input[type=submit]:hover, input[type=button]:hover, input[type=reset]:hover {
 
 <body>
 <div >
-	<form action="join" name="frmReg" method="post"
+	<form action="../project/join.do" name="frmReg" method="post"
 		onsubmit="return validCheck()" onclick="execPostCode()">
 		<input type="hidden" name="save">
 		<table>
-			<tr><th>회원가입<th><tr>
-			<tr><th>이름</th>
-	 			<td> <input type="text"  name="name" ></td>
-		 	</tr>
+			<tr><th>회원가입<th><tr>	
 		 	<tr>
 				<th>아이디</th>
-		 		<td><input type="text" id = "id" name="id" required oninput = "checkId()" /> 
+		 		<td><input type="text" id = "id" name="user_id" required oninput = "checkId()" /> 
 				<span class="id_ok">사용 가능한 아이디입니다.</span>
 				<span class="id_already">누군가 이 아이디를 사용하고 있어요.</span></td>
 			</tr>
 
 		 	<tr><th>비밀번호</th>
-		 		<td><input type="password" name="password">(8자리 이상 입력해주세요)</td>
+		 		<td><input type="password" name="user_pw">(8자리 이상 입력해주세요)</td>
+		 	</tr>
+			<tr><th>이름</th>
+	 			<td> <input type="text"  name="user_name" ></td>
 		 	</tr>
 		 	<tr>
 		 		<th>닉네임</th> 
-		 		<td><input type="text" id = "nick" name="nick" required oninput = "checkNick()" /> 
+		 		<td><input type="text" id = "nick" name="user_nickname" required oninput = "checkNick()" /> 
 				<span class="nick_ok">사용 가능한 닉네임입니다.</span>
 				<span class="nick_already">누군가 이 닉네임을 사용하고 있어요.</span></td>
 		 	</tr>
-			 <tr>
-				<th>성별</th>
-				<td><input type="radio" value="남자" name="gender" checked>남자
-					<input type="radio" value="여자" name="gender">여자</td>
-			</tr>
-		 	<tr><th>생년월일</th>
-				<td><input type="date" name="birth"></td>
+			<tr><th>이메일</th>
+				<td><input type="text" name="user_email"></td>
 			</tr>
 			<tr><th>전화번호</th>
-				<td><input type="tel" value="${join.tel}" name="tel">(ㅡ 없이 입력해주세요)</td>
+				<td><input type="tel" name="user_phone">(ㅡ 없이 입력해주세요)</td>
 			</tr>
-				<tr><th>기본주소</th>
-				<td> <input class="form-control" style="top: 5px;" name="m_addr" id="m_addr" type="text">
+				<tr><th>주소</th>
+				<td> <input class="form-control" style="top: 5px;" name="user_address" id="m_addr" type="text" readonly>
 				  <input type="button" class="btn btn-primary btn-sm" value="주소찾기" onclick="sample6_execDaumPostcode()"></td>
 			</tr>
-			<tr><th>상세주소</th>
-				<td><input type="text" name="s_addr">(동/호)</td>
-			</tr>
-			<tr><th>포인트</th>
-				<td><input type="number" value="0" name="point" readonly ></td>
-			</tr>
-			<tr><th>팻시터 지원여부</th>
-				<td><input type="radio" value="지원" name="p_auth">지원
-					<input type="radio" value="미지원" name="p_auth" checked>미지원</td>
-			</tr>
-			<tr><th>자격증 여부</th>
-					<!-- <td><input type="radio" value="o"  name="license">있음
-					<input type="radio" value="x" name="license" checked>없음</td> -->
-					<td><input type="text" value="x" name="license"></td>
-			</tr>
-			<tr><th>근무가능 일수(펫시터 지원시 입력)</th>
-				<td><input type="number" value=0 name="work_date"></td>
-			</tr>
-			<tr><th>거주형태(펫시터 지원시 입력)</th>
-				<td><select name="home" id="home_select">
-						<option value="">선택없음</option>
-						<option value="빌라">빌라</option>
-						<option value="아파트">아파트</option>
-						<option value="단독주택">단독주택</option>
-						<option value="기타">기타</option>
-				</select> 
-				<span id="home_id">
-				<input type="text" name="home_etc" disabled="disabled" 
-						placeholder="기타" >
-				</span></td>
-			</tr>
+
 			<tr>
 				<td colspan="2" style="text-align: center">
 				<input type="submit" value="가입하기"> 
@@ -210,14 +171,14 @@ if (frm.password.value == "") {
 }
 if (frm.password.value.length < 8){
 	alert('패스워드는 8글자 이상으로 하세요.');
-	frm.password.focus();				// 포커스(커서) 이동 
-	return false;						//함수가 종료.
+	frm.password.focus();				
+	return false;						
 }
 if (frm.nick.value == "") {
     alert("닉네임을 입력하지 않았습니다.")
     frm.nick.focus();
     return false;
-	}
+}
 if (frm.tel.value == "") {
     alert("전화번호를 입력하지 않았습니다.")
     frm.tel.focus();
@@ -237,31 +198,37 @@ if (frm.s_addr.value == "") {
 </script>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script>
+
 function sample6_execDaumPostcode() {
-new daum.Postcode(
-{
-    oncomplete : function(data) {
-       var fullAddr = ''; 
-       var extraAddr = '';
-       if (data.userSelectedType === 'R') { 
-           fullAddr = data.roadAddress;
-        } else { 
-            fullAddr = data.jibunAddress;
-        }
-        if (data.userSelectedType === 'R') {
-        if (data.bname !== '') {
-                 extraAddr += data.bname;
-            }
-          if (data.buildingName !== '') {
-                extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-            }
-            fullAddr += (extraAddr !== '' ? ' (' + extraAddr + ')' : '');
-        }
-        document.getElementById('m_addr').value = fullAddr;
-        document.getElementById('s_addr').focus();
-    }
-}).open();
+	  new daum.Postcode({
+	    oncomplete: function(data) {
+	      var fullAddr = ''; 
+	      var extraAddr = '';
+	      if (data.userSelectedType === 'R') { 
+	        fullAddr = data.roadAddress;
+	      } else { 
+	        fullAddr = data.jibunAddress;
+	      }
+	      if (data.userSelectedType === 'R') {
+	        if (data.bname !== '') {
+	          extraAddr += data.bname;
+	        }
+	        if (data.buildingName !== '') {
+	          extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+	        }
+	        fullAddr += (extraAddr !== '' ? ' (' + extraAddr + ')' : '');
+	      }
+	      document.getElementById('m_addr').value = fullAddr;
+	      function handleClick() {
+	    	  sample6_execDaumPostcode();
+	    	  window.close(); // 팝업창에서 호출하는 경우에만 동작합니다.
+	    }
+	    }
+	}).open();
 }
+
+
+	document.getElementById('button').addEventListener('click', handleClick);
 </script>
 <script type="text/javascript">
 document.getElementById("home_select").addEventListener("change",function(){

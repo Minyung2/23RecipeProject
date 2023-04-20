@@ -39,15 +39,30 @@ public class RecipeWriteController extends HttpServlet {
 		String recipe_amount_portion = req.getParameter("recipe_amount");
 		String recipe_cooking_time = req.getParameter("recipe_cooking_time");
 		String recipe_difficulty = req.getParameter("recipe_difficulty");
-		String recipe_image_url = "test";
 		RecipeDto recipeDto = new RecipeDto();
 		recipeDto.setUser_idx(user_idx);
 		recipeDto.setRecipe_name(recipe_name);
 		recipeDto.setRecipe_desc(recipe_desc);
-		recipeDto.setAmount_portion(recipe_amount_portion);
-		recipeDto.setCooking_time(recipe_cooking_time);
-		recipeDto.setImage_url(recipe_image_url);
-		recipeDto.setDifficulty(recipe_difficulty);
+		recipeDto.setRecipe_people(recipe_amount_portion);
+		recipeDto.setRecipe_time(recipe_cooking_time);
+		
+		String fileName = req.getPart("mainPhotoUpload").getSubmittedFileName();
+		String mainext = fileName.substring(fileName.lastIndexOf("."));
+		String mainFileName = user_idx+"_"+recipe_name+"_mainPhoto"+mainext;
+		String path = req.getServletContext().getRealPath("/Storage");
+//		mainFileName = path+"\\" + mainFileName;
+		InputStream is = req.getPart("mainPhotoUpload").getInputStream();
+		FileOutputStream os = new FileOutputStream(path+"\\"+mainFileName);
+		System.out.println(path);
+		byte[] buffer = new byte[1024];
+		while (is.read(buffer) > 0) {
+			os.write(buffer);
+		}
+		is.close();
+		os.close();
+		
+		recipeDto.setRecipe_image_url(mainFileName);
+		recipeDto.setRecipe_difficulty(recipe_difficulty);
 		RecipeDao recipeDao = new RecipeDao();
 		recipeDao.insertRecipe(recipeDto);
 		RecipeIngredientDto recipeIngredientDto = new RecipeIngredientDto();
@@ -67,12 +82,14 @@ public class RecipeWriteController extends HttpServlet {
 		for (int i = 0; i < recipe_ingre_name.length; i++) {
 			if (!recipe_ingre_name[i].equals("")) {
 				recipeIngredientDto.setRecipe_id(recipe_id);
-				recipeIngredientDto.setAmount(ingredient_amount[i]);
+				recipeIngredientDto.setIngredient_amount(ingredient_amount[i]);
 				recipeIngredientDto.setIngredient_name(recipe_ingre_name[i]);
 				recipeIngredientDao.insertIngredient(recipeIngredientDto);
 			}
 		}
-
+		
+		
+		
 		RecipeStepDto stepDto = new RecipeStepDto();
 		RecipeStepDao stepDao = new RecipeStepDao();
 		String[] stepDesc = req.getParameterValues("step_text[]");

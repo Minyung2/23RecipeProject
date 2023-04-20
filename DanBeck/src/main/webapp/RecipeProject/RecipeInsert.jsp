@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="java.io.*,java.util.*,org.apache.commons.fileupload.*,org.apache.commons.fileupload.disk.*,org.apache.commons.fileupload.servlet.*" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	
 <!DOCTYPE html>
 <html>
@@ -19,6 +20,12 @@
 </script>
 </head>
 <body>
+	<c:if test="${sessionScope.user==null }">
+		<script type="text/javascript">
+			alert('글쓰기는 로그인을 해야합니다.');
+			location.href='../project/loginCheck.do'; 
+		</script>
+</c:if> 
 	<div class="insert_form">
 	<form action="../project/recipeWrite.do" method="post" enctype="multipart/form-data">
 		<div class="insert_form_title">
@@ -36,7 +43,7 @@
 			</div>
 			<div>
 				<img id="mainPhotoHolder" onclick="browseMainFile()" src="../projectResources/img/camera.jpg" style="width: 250px; height: 250px; cursor:pointer">
-				<input type="file" name="mainPhotoUpload" class="fileUpload" id="fileUpload1" style="display: none;">
+				<input type="file" name="mainPhotoUpload" class="mainPhotoUpload" id="mainPhotoUpload" style="display: none;">
 			</div>
 			<div class="summary_category">
 				<b>카테고리</b> <select name="select_category_1" id="select_category_1">

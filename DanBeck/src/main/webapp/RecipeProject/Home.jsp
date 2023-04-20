@@ -8,5 +8,6 @@
 </head>
 <body>
 		<a href="../project/recipeList.do">눌러</a>
+		<a href="../project/loginCheck.do">로그인</a>
 </body>
 </html>

@@ -12,12 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import recipe.dao.RecipeCommentDao;
 import recipe.dao.RecipeDao;
 import recipe.dao.RecipeIngredientDao;
-import recipe.dao.RecipeRatingDao;
+import recipe.dao.RecipeReviewDao;
 import recipe.dao.RecipeStepDao;
 import recipe.dto.RecipeCommentDto;
 import recipe.dto.RecipeDto;
 import recipe.dto.RecipeIngredientDto;
-import recipe.dto.RecipeRatingDto;
+import recipe.dto.RecipeReviewDto;
 import recipe.dto.RecipeStepDto;
 
 @WebServlet("/project/recipeview.do")
@@ -28,23 +28,23 @@ public class RecipeViewController extends HttpServlet{
 		RecipeDao recipeDao = new RecipeDao();
 		RecipeIngredientDao recipeIngredientDao = new RecipeIngredientDao();
 		RecipeStepDao stepDao = new RecipeStepDao();
-		RecipeRatingDao ratingDao = new RecipeRatingDao();
+		RecipeReviewDao ReviewDao = new RecipeReviewDao();
 		RecipeCommentDao commentDao = new RecipeCommentDao();
 		
 		
 		RecipeDto recipeDto = recipeDao.detailView(recipe_id);
 		List<RecipeIngredientDto> ingreList = recipeIngredientDao.detailView(recipe_id); 
 		List<RecipeStepDto> stepList = stepDao.detailView(recipe_id);
-		List<RecipeRatingDto> ratingList = ratingDao.detailView(recipe_id);
-		int ratingCount = ratingDao.getRatingCount(recipe_id);
+		List<RecipeReviewDto> ReviewList = ReviewDao.detailView(recipe_id);
+		int ReviewCount = ReviewDao.getreviewCount(recipe_id);
 		List<RecipeCommentDto> commentList = commentDao.detailView(recipe_id);
 		int commentCount = commentDao.getCommentCount(recipe_id);
 		
 		req.setAttribute("recipeDto", recipeDto);
 		req.setAttribute("ingreList", ingreList);
 		req.setAttribute("stepList", stepList);
-		req.setAttribute("ratingList", ratingList);
-		req.setAttribute("ratingCount", ratingCount);
+		req.setAttribute("ReviewList", ReviewList);
+		req.setAttribute("ReviewCount", ReviewCount);
 		req.setAttribute("commentList", commentList);
 		req.setAttribute("commentCount", commentCount);
 		

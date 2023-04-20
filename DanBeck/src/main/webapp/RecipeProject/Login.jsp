@@ -35,11 +35,11 @@ input[type=submit], input[type=button] {
 
 <section>
 <div>
-   <form action="loginAction.do" method="post">
-		<input type="text" name="id" placeholder="아이디 입력하세요.">
-		<input type="password" name="password" placeholder="비밀번호 입력하세요.">
+   <form action="../project/loginCheck.do" method="post">
+		<input type="text" name="user_id" placeholder="아이디 입력하세요.">
+		<input type="password" name="user_pw" placeholder="비밀번호 입력하세요.">
 		<input type="submit" value="Login">
-		<input type="button" value="HOME" onclick = "location.href='./'">
+		<!-- <input type="button" value="HOME" onclick = "location.href='./'"> -->
 	</form>	
 </div>
 </section>

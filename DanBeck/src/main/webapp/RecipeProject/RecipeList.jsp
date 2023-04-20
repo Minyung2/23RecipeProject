@@ -76,10 +76,12 @@ a.button:hover{
 </style>
 </head>
 <body>
+<jsp:include page="../projectResources/Top.jsp"/>
 <div>
 			<table class="table-primary" border="1" style="width: 90%;">
 				<tr>
 					<th>번호</th>
+					<th>사진</th>
 					<th>레시피명</th>
 					<th>작성자</th>
 					<th>조회수</th>
@@ -87,14 +89,15 @@ a.button:hover{
 				<c:forEach var="rec" items="${list}" varStatus="stat">
 				<tr>
 						<td>${pageDto.totalCount-((pageDto.currentPage-1)*pageDto.pageSize)-stat.index}</td>
+						<td><img src="${pageContext.request.contextPath}/Storage/${rec.recipe_image_url}" style="width: 150px;height: 150px;"/>
 						<td><a href="../project/recipeview.do?recipe_id=${rec.recipe_id}">${rec.recipe_name}</a></td>
 						<td>${rec.user_nickname}</td>
-						<td>${rec.visitCount}</td>
+						<td>${rec.recipe_visitCount}</td>
 				</tr>		
 					</c:forEach>
 			</table>
  	<a class="button" href="../project/recipeWrite.do">글쓰기</a>&nbsp;&nbsp;
- 	<a class="button" href="/index.do">홈 </a>
+ 	<a class="button" href='../RecipeProject/Home.jsp'>홈 </a>
  	</div>
 
 		<div style="text-align: center;">

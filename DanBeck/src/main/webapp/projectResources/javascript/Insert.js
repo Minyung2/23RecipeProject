@@ -78,6 +78,7 @@ $(function(){
 	});
 });	
 
+// step 삭제 버튼
 $(function(){
   $(document).on('click', '.stepDelBtn', function(){
     $(this).parent().remove(); 
@@ -93,6 +94,21 @@ $(document).on('mouseleave', '.step_row .step_div', function() {
   $(this).find('.stepDelBtn').css('display', 'none');
 });
 
+// 메인 사진 첨부 기능
+$(document).on('click', '#mainPhotoHolder', function(){
+  $(this).siblings('.mainPhotoUpload').trigger('click');
+});
+
+$(document).on('change', '.mainPhotoUpload', function(){
+  var input = this;
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      $(input).siblings('#mainPhotoHolder').attr('src', e.target.result);
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+});
 // 사진 첨부 기능
 $(document).on('click', '.stepDivPhoto', function(){
   $(this).siblings('.fileUpload').trigger('click');
