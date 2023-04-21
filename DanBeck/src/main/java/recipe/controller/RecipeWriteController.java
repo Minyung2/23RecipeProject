@@ -28,7 +28,7 @@ public class RecipeWriteController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 			req.getRequestDispatcher("/RecipeProject/RecipeInsert.jsp").forward(req, resp);
-		}
+	}
 	
 	
 	@Override
@@ -50,6 +50,7 @@ public class RecipeWriteController extends HttpServlet {
 		String mainext = fileName.substring(fileName.lastIndexOf("."));
 		String mainFileName = user_idx+"_"+recipe_name+"_mainPhoto"+mainext;
 		String path = req.getServletContext().getRealPath("/Storage");
+		System.out.println(path);
 //		mainFileName = path+"\\" + mainFileName;
 		InputStream is = req.getPart("mainPhotoUpload").getInputStream();
 		FileOutputStream os = new FileOutputStream(path+"\\"+mainFileName);

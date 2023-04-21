@@ -1,6 +1,7 @@
 package recipe.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -14,11 +15,13 @@ import recipe.dao.RecipeDao;
 import recipe.dao.RecipeIngredientDao;
 import recipe.dao.RecipeReviewDao;
 import recipe.dao.RecipeStepDao;
+import recipe.dao.ReviewImgDao;
 import recipe.dto.RecipeCommentDto;
 import recipe.dto.RecipeDto;
 import recipe.dto.RecipeIngredientDto;
 import recipe.dto.RecipeReviewDto;
 import recipe.dto.RecipeStepDto;
+import recipe.dto.ReviewImgDto;
 
 @WebServlet("/project/recipeview.do")
 public class RecipeViewController extends HttpServlet{
@@ -30,8 +33,7 @@ public class RecipeViewController extends HttpServlet{
 		RecipeStepDao stepDao = new RecipeStepDao();
 		RecipeReviewDao ReviewDao = new RecipeReviewDao();
 		RecipeCommentDao commentDao = new RecipeCommentDao();
-		
-		
+		ReviewImgDao ReviewImageDao = new ReviewImgDao();
 		RecipeDto recipeDto = recipeDao.detailView(recipe_id);
 		List<RecipeIngredientDto> ingreList = recipeIngredientDao.detailView(recipe_id); 
 		List<RecipeStepDto> stepList = stepDao.detailView(recipe_id);
@@ -40,6 +42,12 @@ public class RecipeViewController extends HttpServlet{
 		List<RecipeCommentDto> commentList = commentDao.detailView(recipe_id);
 		int commentCount = commentDao.getCommentCount(recipe_id);
 		
+		List<ReviewImgDto> reviewImgList = new ArrayList<>(); 
+		for (RecipeReviewDto review : ReviewList) {
+		    List<ReviewImgDto> images = ReviewImageDao.getImgList(recipe_id, review.getReview_id());
+		    reviewImgList.addAll(images); 
+		}
+		
 		req.setAttribute("recipeDto", recipeDto);
 		req.setAttribute("ingreList", ingreList);
 		req.setAttribute("stepList", stepList);
@@ -47,7 +55,7 @@ public class RecipeViewController extends HttpServlet{
 		req.setAttribute("ReviewCount", ReviewCount);
 		req.setAttribute("commentList", commentList);
 		req.setAttribute("commentCount", commentCount);
-		
+		req.setAttribute("reviewImgList", reviewImgList);
 		req.getRequestDispatcher("../RecipeProject/RecipeView.jsp").forward(req, resp);
 	}
 }

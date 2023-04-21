@@ -26,12 +26,12 @@ public class UsersDao extends DBConnectpool {
 		return result;
 	}
 	
-	public SessionDto sessionLogin(String idx) {
+	public SessionDto sessionLogin(String id) {
 		SessionDto dto = new SessionDto();
-		String sql="select * from users where user_idx=?";
+		String sql="select * from users where user_id=?";
 		try {
 			psmt=con.prepareStatement(sql);
-			psmt.setString(1, idx);
+			psmt.setString(1, id);
 			rs=psmt.executeQuery();
 			if(rs.next()) {
 				dto.setUser_id(rs.getString("user_id"));

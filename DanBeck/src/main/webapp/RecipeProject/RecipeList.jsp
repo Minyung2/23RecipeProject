@@ -77,7 +77,7 @@ a.button:hover{
 </head>
 <body>
 <jsp:include page="../projectResources/Top.jsp"/>
-<div>
+<div>		
 			<table class="table-primary" border="1" style="width: 90%;">
 				<tr>
 					<th>번호</th>

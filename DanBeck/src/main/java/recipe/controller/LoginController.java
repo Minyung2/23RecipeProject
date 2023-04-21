@@ -25,7 +25,6 @@ public class LoginController extends HttpServlet {
 		HttpSession session = req.getSession();
 		String user_id=req.getParameter("user_id");
 		String user_pw=req.getParameter("user_pw");
-		
 		UsersDao dao = new UsersDao();
 		SessionDto user = new SessionDto();
 		
@@ -34,6 +33,7 @@ public class LoginController extends HttpServlet {
 			user=dao.sessionLogin(user_id);
 			session.setAttribute("user",user);
 			session.setMaxInactiveInterval(1800);
+
 			resp.sendRedirect("../project/recipeList.do");
 		}
 		else {

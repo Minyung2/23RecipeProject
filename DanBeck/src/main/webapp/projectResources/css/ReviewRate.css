@@ -1,32 +1,104 @@
 @charset "UTF-8";
-/* css 변경이 브라우저에 바로 반영이 안되면 ctrl + f5  */
-.star-rating {
-  display: flex;
-  flex-direction: row-reverse;
-  font-size: 1.5rem;
-  line-height: 1.7rem;
-  justify-content: space-beteween;
-  padding: 0 0.2em;
-  text-align: center;
-  width: 5em;
+
+@import "compass/css3";
+
+$
+unchecked-star: '\2606 ';
+ $unchecked-color: #888 ;
+ $checked-star: '\2605 ';
+ $checked-color: #e52 ;
+
+.star-cb-group {
+	/* remove inline-block whitespace */
+	font-size: 0; * {
+	font-size: 1rem;
 }
- 
-.star-rating input {
-  display: none;
+/* flip the order so we can use the + and ~ combinators */
+unicode-bidi: bidi-override ;
+  direction: rtl ;
+  & > input {
+	display: none; & + label {
+	/* only enough room for the star */ display : inline-block;
+	overflow: hidden;
+	text-indent: 9999px;
+	width: 1em;
+	white-space: nowrap;
+	cursor: pointer; &: before { display : inline-block;
+	text-indent: -9999px;
+	content: $unchecked-star;
+	color: $unchecked-color;
 }
- 
-.star-rating label {
-  -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
-  -webkit-text-stroke-width: 1.6px;
-  -webkit-text-stroke-color: #2b2a29;
-  cursor: pointer;
+
 }
- 
-.star-rating :checked ~ label {
-  -webkit-text-fill-color: gold;
+&
+:checked ~ label:before, & + label:hover ~ label:before, & + label:hover:before
+	{
+	content: $checked-star;
+	color: #e52;
+	text-shadow: 0 0 1px #333;
 }
- 
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-  -webkit-text-fill-color: #fff58c;
+
+}
+
+/* the hidden clearer */
+&
+>
+.star-cb-clear+label {
+	text-indent: -9999px;
+	width: .5em;
+	margin-left: -.5em;
+}
+
+&
+>
+.star-cb-clear+label:before {
+	width: .5em;
+}
+
+&
+:hover>input+label:before {
+	content: $unchecked-star;
+	color: $unchecked-color;
+	text-shadow: none;
+}
+
+&
+:hover>input+label:hover ~ label:before, &:hover>input+label:hover:before
+	{
+	content: $checked-star;
+	color: $checked-color;
+	text-shadow: 0 0 1px #333;
+}
+
+}
+//
+extra styles
+:root {
+	font-size: 2em;
+	font-family: Helvetica, arial, sans-serif;
+}
+
+body {
+	background: #333;
+	color: $unchecked-color;
+}
+
+fieldset {
+	border: 0;
+	background: #222;
+	width: 5em;
+	border-radius: 1px;
+	padding: 1em 1.5em 0.9em;
+	margin: 1em auto;
+}
+
+#log {
+	margin: 1em auto;
+	width: 5em;
+	text-align: center;
+	background: transparent;
+}
+
+h1 {
+	text-align: center;
 }

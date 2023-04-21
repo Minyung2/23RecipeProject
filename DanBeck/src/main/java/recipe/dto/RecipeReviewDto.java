@@ -8,7 +8,7 @@ public class RecipeReviewDto {
 	private String recipe_id;
 	private String user_idx;
 	private String user_nickname;
-	private String review_rating;
+	private int review_rating;
 	private String review_content;
 	private Timestamp review_date;
 	public String getReview_id() {
@@ -35,10 +35,10 @@ public class RecipeReviewDto {
 	public void setUser_nickname(String user_nickname) {
 		this.user_nickname = user_nickname;
 	}
-	public String getReview_rating() {
+	public int getReview_rating() {
 		return review_rating;
 	}
-	public void setReview_rating(String review_rating) {
+	public void setReview_rating(int review_rating) {
 		this.review_rating = review_rating;
 	}
 	public String getReview_content() {

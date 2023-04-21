@@ -5,8 +5,8 @@
 	
 <!DOCTYPE html>
 <html>
-<head>
 <meta charset="UTF-8">
+<head>
 <title>삽입술</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link
@@ -15,11 +15,9 @@
 	integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
 	crossorigin="anonymous">
 <link rel="styleSheet" href="../projectResources/css/RecipeInsert.css">
-<script>
-	
-</script>
 </head>
 <body>
+	
 	<c:if test="${sessionScope.user==null }">
 		<script type="text/javascript">
 			alert('글쓰기는 로그인을 해야합니다.');
@@ -235,7 +233,7 @@
 						<div id="step_div_photo1">
 							<img name="step_img_photo[]" id="step_img_photo1" class="stepDivPhoto" src="../projectResources/img/imageAdd.png">
 							
-  							<input type="file" name="fileUpload" class="fileUpload" id="fileUpload1" style="display: none;" multiple>
+  							<input type="file" name="fileUpload" class="fileUpload" id="fileUpload1" style="display: none;" multiple="multiple">
   						</div>
   										
   						<img id="step_div_text1_delBtn" class="stepDelBtn" src="../projectResources/img/file-x.svg">

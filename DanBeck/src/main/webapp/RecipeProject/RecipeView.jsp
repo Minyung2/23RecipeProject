@@ -15,28 +15,12 @@
 	crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">	
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-<style>
-/* .new_comment {
-    background-color: #f7e6ff;
-    animation-name: commentFadeIn;
-    animation-duration: 3s;
-    animation-timing-function: ease-out;
-    animation-iteration-count: 1;
-}
-
-@keyframes commentFadeIn {
-    from {
-        background-color: #f7e6ff;
-    }
-    to {
-        background-color: #ffffff;
-    }
-} */
-</style>	
+	
 </head>
 <body>
 	<div class="recipeView">
 		<div class="recipe_summary">
+
 			<h3>${recipeDto.recipe_name}</h3>
 			<div class="summary_in">${recipeDto.recipe_desc}</div>
 			<div class="summary_info">
@@ -82,23 +66,29 @@
 			<div class="recipe_review">
 				<div class="review_title">
 					<h3>
-						요리 후기 <span>${ratingCount}</span>
+						요리 후기 <span>${ReviewCount}</span>
 					</h3>
-					<c:forEach var="ratingList" items="${ratingList}">
+					<c:forEach var="ReviewList" items="${ReviewList}">
 					<div class="review_user_info">
-						<h4>${ratingList.user_nickname}</h4>&nbsp&nbsp&nbsp&nbsp
-						<span><fmt:formatDate value="${ratingList.rating_date}" pattern="yyyy-MM-dd hh:mm:ss"/></span>&nbsp&nbsp&nbsp&nbsp
+						<h4>${ReviewList.user_nickname}</h4>&nbsp&nbsp&nbsp&nbsp
+						<span><fmt:formatDate value="${ReviewList.review_date}" pattern="yyyy-MM-dd hh:mm:ss"/></span>&nbsp&nbsp&nbsp&nbsp
 						<span>
-						평점 : <c:forEach var="i" begin="1" end="${ratingList.rating}"><i class="fa fa-star" aria-hidden="true" style=" padding:0.1em;"></i></c:forEach>
+						평점 : <c:forEach var="i" begin="1" end="${ReviewList.review_rating}"><i class="fa fa-star" aria-hidden="true" style=" padding:0.1em;"></i></c:forEach>
 						</span>
 					</div>
 					<div class="review_content">
-						<p>${ratingList.rating_content}</p>
+						<p>${ReviewList.review_content} 
+						<c:forEach var="reviewImgList" items="${reviewImgList}">
+						<c:if test="${ReviewList.review_id==reviewImgList.review_id}"> 
+						<img src="${pageContext.request.contextPath}/Storage/${reviewImgList.img_image_url}" style="width:50px; height: 50px;"/>
+						</c:if>
+						</c:forEach></p>
 					</div>
 					</c:forEach>
 				</div>
 				<div class="writeReview">
-					<a href="../project/recipeview.do"><button type="button" id="writeReview" class="btn btn-outline-secondary">리뷰 작성하기</button></a>
+				<input type="hidden" id="recipe_id" name="recipe_id" value="${recipeDto.recipe_id}"/>
+				<button type="button" onclick="location.href='../project/writeReview.do?recipe_id=${recipeDto.recipe_id}'" type="button" id="writeReview" class="btn btn-outline-secondary">리뷰 작성하기</button>
 				</div>
 			</div>
 			<br> <br>
@@ -121,7 +111,7 @@
 				</div>
 				<br><br>
 				<div class="write_comment" >
-					<input type="hidden" name="recipe_id" value="${recipeDto.recipe_id}"/>
+					
 						<div class="row">
 							<textarea name="comment_content" class="form-control" rows="3" style="resize: none;" placeholder="무엇이 궁금하신가요? 댓글을 남겨주세요."></textarea>
 							<button type="submit" id="comment_submit" class="btn btn-outline-secondary">등록</button>
@@ -132,13 +122,13 @@
 	</div>
 	
 	<script>
-	$(function(){
+	
+/* 	$(function(){
 	    $('#writeReview').on('click',function(){
-	        var userNick = '${sessionScope.user.user_nickname}';
-	        var url = '../project/reviewWrite.do?user_nickname=' + userNick; // GET 파라미터를 만듭니다.
+	        var url = '../project/writeReview.do?recipe_id=${recipeDto.recipe_id}'; 
 	        window.open(url, '리뷰 작성', 'width=700, height=600, left=100, top=50, scrollbar=yes, resizable=yes');
 	    });
-	});
+	}); */
 	
 	$(document).ready(function() {
 		  $('#comment_submit').click(function() {
