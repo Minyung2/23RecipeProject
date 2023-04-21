@@ -12,11 +12,44 @@
 .fileList {
 	list-style: none;
 }
+ .star-rating{
+	font-size: 0;
+
+}
+.star-rating__wrap{
+	display: inline-block;
+	font-size: 1rem;
+	padding-top:30px;
+	line-height: 1.7rem;
+}
+.star-rating__wrap:after{
+	content: "";
+	display: table;
+	clear: both;
+}
+.star-rating__ico{
+	float: right;
+	padding-left: 2px;
+	cursor: pointer;
+	color:#ffcc00;
+}
+.star-rating__ico:last-child{
+	padding-left: 0;
+}
+.star-rating__input{
+	display: none;
+}
+.star-rating__ico:hover:before,
+.star-rating__ico:hover ~ .star-rating__ico:before,
+.star-rating__input:checked ~ .star-rating__ico:before
+{
+	content: "\f005";
+} 
 </style>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <link rel="stylesheet"
 	href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="../projectResources/css/ReviewRate.css">
+
 </head>
 
 <script>
@@ -73,14 +106,23 @@
 		    <input name="recipe_id" type="hidden" value="${recipe_id}"/>
 		    <h3>Write review</h3>
 				<span>맛 평점</span>
-				<span class="star-cb-group">
-     			 <input type="radio" id="rating-5" name="rating" value="5" /><label for="rating-5">5</label>
-	    			<input type="radio" id="rating-4" name="rating" value="4" checked="checked" /><label for="rating-4">4</label>
-   					<input type="radio" id="rating-3" name="rating" value="3" /><label for="rating-3">3</label>
-   					<input type="radio" id="rating-2" name="rating" value="2" /><label for="rating-2">2</label>
-  				 	<input type="radio" id="rating-1" name="rating" value="1" /><label for="rating-1">1</label>
-   			  	<input type="radio" id="rating-0" name="rating" value="0" class="star-cb-clear" /><label for="rating-0">0</label>
-  				</span>
+<!-- 				<span class="star-cb-group"> -->
+     			    <div class="star-rating">
+      <div class="star-rating__wrap">
+        <input class="star-rating__input" id="star-rating-5" type="radio" name="rate" value="5" checked="checked">
+        <label class="star-rating__ico fa fa-star-o fa-lg" for="star-rating-5" ></label>
+        <input class="star-rating__input" id="star-rating-4" type="radio" name="rate" value="4">
+        <label class="star-rating__ico fa fa-star-o fa-lg" for="star-rating-4" ></label>
+        <input class="star-rating__input" id="star-rating-3" type="radio" name="rate" value="3">
+        <label class="star-rating__ico fa fa-star-o fa-lg" for="star-rating-3" ></label>
+        <input class="star-rating__input" id="star-rating-2" type="radio" name="rate" value="2">
+        <label class="star-rating__ico fa fa-star-o fa-lg" for="star-rating-2" ></label>
+        <input class="star-rating__input" id="star-rating-1" type="radio" name="rate" value="1">
+        <label class="star-rating__ico fa fa-star-o fa-lg" for="star-rating-1" ></label>
+      </div>
+    </div>
+
+<!--   				</span> -->
 			<hr>
 			<textarea name="review_content" style="width: 35%; height: 150px"
 				placeholder="리뷰를 입력하세요"></textarea>
@@ -100,7 +142,8 @@
 			</a>
 		</form>
 	</div>
-
+	
+	
 
 </body>
 </html>

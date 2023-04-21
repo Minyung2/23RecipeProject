@@ -125,3 +125,10 @@ $(document).on('change', '.fileUpload', function(){
   }
 });
     
+    
+    
+// 유효성 검사
+function post_data() {
+	/* 유효성 검사 */
+	frm1.submit();
+}

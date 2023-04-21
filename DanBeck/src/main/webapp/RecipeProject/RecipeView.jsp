@@ -80,7 +80,7 @@
 						<p>${ReviewList.review_content} 
 						<c:forEach var="reviewImgList" items="${reviewImgList}">
 						<c:if test="${ReviewList.review_id==reviewImgList.review_id}"> 
-						<img src="${pageContext.request.contextPath}/Storage/${reviewImgList.img_image_url}" style="width:50px; height: 50px;"/>
+							<img src="${pageContext.request.contextPath}/Storage/${reviewImgList.img_image_url}" style="width:50px; height: 50px;"/>
 						</c:if>
 						</c:forEach></p>
 					</div>
@@ -139,7 +139,7 @@
 		    }
 		    var data = {
 		      recipe_id: '${recipeDto.recipe_id}',
-		      user_idx: '2',
+		      user_idx: '${sessionScope.user.user_idx}',
 		      comment_content: $('.form-control').val()
 		    };
 		    $.ajax({

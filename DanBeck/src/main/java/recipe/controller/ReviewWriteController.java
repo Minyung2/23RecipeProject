@@ -36,7 +36,7 @@ public class ReviewWriteController extends HttpServlet{
 		System.out.println(recipe_id);
 		String user_idx = req.getParameter("user_idx");
 		String review_content = req.getParameter("review_content");
-		int review_rating = 5;
+		int review_rating = Integer.parseInt(req.getParameter("rate"));
 		RecipeReviewDto dto = new RecipeReviewDto();
 		RecipeReviewDao dao = new RecipeReviewDao();
 		dto.setRecipe_id(recipe_id);

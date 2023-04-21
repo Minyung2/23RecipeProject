@@ -21,7 +21,7 @@
 }
 .form-control ingreInput{
 	width: 200px;
-}
+}	
 
 input::placeholder {
   white-space: pre-wrap;
@@ -45,7 +45,6 @@ input::placeholder {
 .step_div{
 	display: flex;
 }
-
 
 .step_cont{
 	height:160px; 

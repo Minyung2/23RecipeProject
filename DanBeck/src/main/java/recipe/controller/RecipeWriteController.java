@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import recipe.dao.IngredientDao;
 import recipe.dao.RecipeDao;
@@ -33,7 +34,8 @@ public class RecipeWriteController extends HttpServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String user_idx = "1";
+		HttpSession session = req.getSession();
+		String user_idx = (String)session.getAttribute("user_idx");
 		String recipe_name = req.getParameter("recipe_name");
 		String recipe_desc = req.getParameter("recipe_desc");
 		String recipe_amount_portion = req.getParameter("recipe_amount");
@@ -88,9 +90,7 @@ public class RecipeWriteController extends HttpServlet {
 				recipeIngredientDao.insertIngredient(recipeIngredientDto);
 			}
 		}
-		
-		
-		
+
 		RecipeStepDto stepDto = new RecipeStepDto();
 		RecipeStepDao stepDao = new RecipeStepDao();
 		String[] stepDesc = req.getParameterValues("step_text[]");
