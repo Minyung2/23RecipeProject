@@ -1,152 +1,69 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+   pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<script src="https://code.jquery.com/jquery-3.6.4.js"
-	integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
-	crossorigin="anonymous"></script>
-<style>
-@import
-	url('https://fonts.googleapis.com/css2?family=Gugi&display=swap');
+<!DOCTYPE html>
+<html lang="kor">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .b{
+            border: 1px solid black;
+        }
 
-@import
-	url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&display=swap')
-	;
-</style>
-<%-- <jsp:include page="../common/Top.jsp" /> --%>
-<link rel="stylesheet" href="../css/top.css?v=3">
+        #main-menu>.nav-item>.nav-link.active{
+            background-color: #5cb85c;
+            color: #fff; /* 선택된 링크 텍스트 색상 */
+        }
+        #main-menu>.nav-item>.nav-link{
+            color:#5cb85c;
+        }
 
-<header>
-	<div id="headerbar" onscroll="headerbarToggle()"></div>
-	
-	<a class="home" href='../RecipeProject/Home.jsp'>집에 보내조</a> <a class="m-icon"><ion-icon 	name="person-outline"></ion-icon></a>
-<!-- 	<form action="#" method="get" class="searchBar">
-		<input type="text" id="searchRecipe"> 
-		<div id="suggestion_keyword">		
-		</div>
-		<input type="submit" value="돋보기">
-	</form> -->
-	<br><br><br>
-	<div>
-		<section class="log">
-			<c:if test="${sessionScope.user ==null }">
-				<a class="login-out-reg" href="../project/loginCheck.do">로그인</a>
-				<a class="login-out-reg" href="../project/join.do">회원가입</a>
-			</c:if>
-			<c:if test="${sessionScope.user !=null }">
-				<a class="login-out-reg" href="../project/logout.do">로그아웃</a>
-			</c:if>
-		</section>
+        
 
-		<nav class="navMenu">
-			<div class="nav-links">
-				<a href="join">추천</a> <a href="rblist">분류</a>
-				<a href="q_list">랭킹</a>
-			</div>
-		</nav>
-		<div class="burger">
-			<div class="line1"></div>
-			<div class="line2"></div>
-			<div class="line3"></div>
-		</div>
-	</div>
+    </style>
+</head>
 
-</header>
-<script>
-$(function(){
-	var delayTimer;
-	$('#searchRecipe').on('keyup', function() {
-	  clearTimeout(delayTimer);
-	  delayTimer = setTimeout(function() {
-	    $.ajax({
-	      url: "/jspstudy/autoSearch.do",
-	      data: {
-	        name: $("#searchRecipe").val()
-	      },
-	      type: "GET"
-	    })
-	    .done(function(data, textStatus) {
-	      let temp = "<ul>";
-	      $.each(data.suggestions, function(key, value) {
-	        temp += "<li>" + value + "</li>";
-	      });
-	      temp += "</ul>";
-	      $('#suggestion_keyword').html(temp);
-	    })
-	    .fail(function(data, textStatus) {
-	      console.log('error', data, textStatus);
-	    })
-	  }, 500); // 500ms 이후에 요청을 보냄
-	});
-})
-	//HeaderToggle
-	var prevScrollPos = window.pageYOffset;
-	console.log("first Y offset: " + prevScrollPos) //first value : 0
-	window.onscroll = headerbarToggle
-	function headerbarToggle() {
-		var header = document.getElementById("headerbar");
-
-		var currentScrollPos = window.pageYOffset; // current Y offset
-		if (prevScrollPos < currentScrollPos) {
-			header.style.opacity = '0.8';
-		} else {
-			header.style.opacity = '0';
-		}
-	}
-	
-	const logSlide = () =>{
-		const mIcon = document.querySelector('.m-icon');
-		const log = document.querySelector('.log');
-		const logAll = document.querySelectorAll('.log a');
-
-		mIcon.addEventListener('click', () => {
-			log.classList.toggle('log-active');
-			
-			logAll.forEach((link, index) =>{
-				if(link.style.animation){
-					link.style.animation = '';
-				}else{
-					link.style.animation = `logLinkFade 0.5s ease forwards ${index /7 + 0.3}s`;
-				}
-			});
-		});
-	}
-	
-	logSlide();
-	
-	const navSlide = () => {
-		const burger = document.querySelector('.burger');
-		const nav = document.querySelector('.nav-links');
-		const navLinks = document.querySelectorAll('.nav-links a');
-
-		
-		burger.addEventListener('click', () => {
-	        //Toggle Nav
-			nav.classList.toggle('nav-active');
-	        
-	        //Animate Links
-	        navLinks.forEach((link, index) => {
-	            
-	            if(link.style.animation){
-	                
-	                link.style.animation = '';
-	                
-	            } else {
-	                
-	                link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.3}s`;
-	                
-	            }
-	        });
-	        //Burger Animation
-	        burger.classList.toggle('toggle');
-	    });
-	}
-
-	navSlide();
-</script>
-<script type="module"
-	src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule
-	src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<body>
+    <div class="d-flex justify-content-center"><img class="img-fluid" src="../projectResources/img/camera.jpg" style="width: 25rem; height: 15rem;" ></div>
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom" style="width: 60%; margin-left: 20%;">
+        <div class="d-flex align-items-center input-goup mb-3 mb-md-0 me-md-auto text-decoration-none">
+<!--            <input class="input-group" type="text"> -->
+<!--            <button>검색</button> -->
+        </div>
+      
+  		
+        <ul class="nav nav-pills" id="main-menu">
+        
+          <li class="nav-item"><a href="#" class="nav-link active">Recipes</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Write</a></li>
+          
+      <c:choose>
+          <c:when test="${empty sessionScope.user.user_idx}">
+              <li class="nav-item"><a href="../project/loginCheck.do" class="nav-link">Login</a></li>
+              <li class="nav-item"><a href="#" class="nav-link">Signup</a></li>
+          </c:when>
+          <c:otherwise>
+             <li class="nav-item"><a href="../project/logout.do" class="nav-link">Logout</a></li>
+          </c:otherwise>
+      </c:choose>
+             
+        </ul>
+    </header>
 
 
+    
+       
+   
+
+
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+</body>
+</html>

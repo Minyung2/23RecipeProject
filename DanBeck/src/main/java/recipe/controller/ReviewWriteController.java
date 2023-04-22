@@ -44,12 +44,7 @@ public class ReviewWriteController extends HttpServlet{
 		dto.setReview_content(review_content);
 		dto.setReview_rating(review_rating);
 		dao.insertReview(dto);
-		try {
-			Thread.sleep(2000);
-		}catch(InterruptedException e) {
-			System.out.println("쓰레드 에러");
-			e.printStackTrace();
-		}
+		
 		String review_id = dao.getLastReviewId();
 		
 		ReviewImgDao idao = new ReviewImgDao();
@@ -80,6 +75,8 @@ public class ReviewWriteController extends HttpServlet{
 			fos.close();
 		}
 		resp.sendRedirect("../project/recipeview.do?recipe_id="+recipe_id);
-
+		dao.close();
+		idao.close();
+		
 	}
 }

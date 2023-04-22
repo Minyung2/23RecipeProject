@@ -11,6 +11,28 @@ public class RecipeDto {
 	private String recipe_difficulty;
 	private String recipe_image_url;
 	private int recipe_visitCount;
+	private String cate1;
+	private String cate2;
+	private String category_kind_name;
+	
+	public String getCategory_kind_name() {
+		return category_kind_name;
+	}
+	public void setCategory_kind_name(String category_kind_name) {
+		this.category_kind_name = category_kind_name;
+	}
+	public String getCate1() {
+		return cate1;
+	}
+	public void setCate1(String cate1) {
+		this.cate1 = cate1;
+	}
+	public String getCate2() {
+		return cate2;
+	}
+	public void setCate2(String cate2) {
+		this.cate2 = cate2;
+	}
 	public String getRecipe_id() {
 		return recipe_id;
 	}

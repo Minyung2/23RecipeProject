@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import DBpackage.DBConnectpool;
+import recipe.dto.PageDto;
 import recipe.dto.RecipeDto;
 
 public class RecipeDao extends DBConnectpool {
@@ -13,49 +14,72 @@ public class RecipeDao extends DBConnectpool {
 		super();
 	}
 
-	public int getCount() {
-		int count = 0;
-		String sql = "select count(*) from recipe";
-		try {
-			psmt = con.prepareStatement(sql);
-			rs = psmt.executeQuery();
-			if (rs.next()) {
-				count = rs.getInt(1);
-			}
-		} catch (Exception e) {
-			System.out.println("게시물 Count 조회중 에러");
-			e.printStackTrace();
-		}
-		return count;
+	public int getCount(Map<String,Object> map) {
+	    int count = 0;
+	    String sql = "SELECT COUNT(*) FROM recipe r";
+	    if (map.get("findText") != null && map.get("field").equals("T")) {
+	        sql += " INNER JOIN recipe_category_kind rck ON rck.category_kind_idx = r.cate1 AND rck.category_kind_type ='방법별' AND rck.category_kind_name LIKE concat('%', ?, '%')";
+	    } else if(map.get("findText") != null && map.get("field").equals("I")) {
+	        sql += " INNER JOIN recipe_category_kind rck ON rck.category_kind_idx = r.cate1 AND rck.category_kind_type ='재료별' AND rck.category_kind_name LIKE concat('%', ?, '%')";
+	    }
+	    try {
+	        psmt = con.prepareStatement(sql);
+	        if (map.get("findText") != null) {
+	            psmt.setString(1, map.get("findText").toString());
+	        }
+	        rs = psmt.executeQuery();
+	        if (rs.next()) {
+	            count = rs.getInt(1);
+	        }
+	    } catch (Exception e) {
+	        System.out.println("게시물 Count 조회중 에러");
+	        e.printStackTrace();
+	    }
+	    return count;
 	}
 
 
-	public List<RecipeDto> getList(Map<String, Integer> map) {
-		List<RecipeDto> list = new ArrayList<>();
-		String sql = "SELECT rt.*,u.user_nickname FROM recipe rt,users u where u.user_idx=rt.user_idx ORDER BY recipe_id DESC LIMIT ?, ?";
-		try {
-			psmt = con.prepareStatement(sql);
-			psmt.setInt(1, map.get("startNo"));
-			psmt.setInt(2, map.get("pageSize"));
-			rs = psmt.executeQuery();
-			while (rs.next()) {
-				RecipeDto dto = new RecipeDto();
-				dto.setRecipe_id(rs.getString("recipe_id"));
-				dto.setUser_idx(rs.getString("user_idx"));
-				dto.setRecipe_name(rs.getString("recipe_name"));
-				dto.setRecipe_desc(rs.getString("recipe_desc"));
-				dto.setRecipe_people(rs.getString("recipe_people"));
-				dto.setRecipe_time(rs.getString("recipe_time"));
-				dto.setRecipe_difficulty(rs.getString("recipe_difficulty"));
-				dto.setRecipe_image_url(rs.getString("recipe_image_url"));
-				dto.setUser_nickname(rs.getString("u.user_nickname"));
-				list.add(dto);
-			}
-		} catch (SQLException e) {
-			System.out.println("레시피 리스트 조회중 DB 에러");
-			e.printStackTrace();
-		}
-		return list;
+	public List<RecipeDto> getList(PageDto map) {
+	    List<RecipeDto> list = new ArrayList<>();
+	    String sql = "";
+	    try {
+	        sql = "SELECT r.*, u.user_nickname, rck.category_kind_name FROM recipe r LEFT JOIN users u ON u.user_idx = r.user_idx ";
+	        if (map.getFindText() != null && map.getField().equals("T")) {
+	            sql += "LEFT JOIN recipe_category_kind rck1 ON rck1.category_kind_idx = r.cate1 AND rck1.category_kind_type ='방법별' AND rck1.category_kind_name LIKE concat('%"+map.getFindText()+"%') ";
+	        } else if (map.getFindText() != null && map.getField().equals("I")) {
+	            sql += "LEFT JOIN recipe_category_kind rck2 ON rck2.category_kind_idx = r.cate1 AND rck2.category_kind_type ='재료별' AND rck2.category_kind_name LIKE concat('%"+map.getFindText()+"%') ";
+	        }
+	        sql += "LEFT JOIN recipe_category_kind rck ON rck.category_kind_idx = r.cate1 ";
+	        sql += "ORDER BY recipe_id DESC LIMIT ?, ?";
+
+	        System.out.println(sql);
+	        psmt = con.prepareStatement(sql);
+	        psmt.setInt(1, map.getStartNo());
+	        psmt.setInt(2, map.getPageSize());
+	        rs = psmt.executeQuery();
+	        while (rs.next()) {
+	            RecipeDto dto = new RecipeDto();
+	            dto.setRecipe_id(rs.getString("recipe_id"));
+	            dto.setUser_idx(rs.getString("user_idx"));
+	            dto.setRecipe_name(rs.getString("recipe_name"));
+	            dto.setRecipe_desc(rs.getString("recipe_desc"));
+	            dto.setRecipe_people(rs.getString("recipe_people"));
+	            dto.setRecipe_time(rs.getString("recipe_time"));
+	            dto.setRecipe_difficulty(rs.getString("recipe_difficulty"));
+	            dto.setRecipe_image_url(rs.getString("recipe_image_url"));
+	            dto.setUser_nickname(rs.getString("user_nickname"));
+	            dto.setCate1(rs.getString("cate1"));
+	            dto.setCate2(rs.getString("cate2"));
+	            dto.setCategory_kind_name(rs.getString("category_kind_name"));
+	            list.add(dto);
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("RecipeDao getRecipeList Error : " + e.getMessage());
+	    } finally {
+	        close();
+	    }
+
+	    return list;
 	}
 
 	public RecipeDto detailView(String recipe_id) {
@@ -72,7 +96,7 @@ public class RecipeDao extends DBConnectpool {
 				dto.setRecipe_people(rs.getString("recipe_people"));
 				dto.setRecipe_time(rs.getString("recipe_time"));
 				dto.setRecipe_time(rs.getString("recipe_time"));
-				dto.setRecipe_image_url("recipe_image_url");
+				dto.setRecipe_image_url(rs.getString("recipe_image_url"));
 			}
 		} catch (Exception e) {
 			System.out.println("상세보기 불러오기 중 DB 오류");
@@ -99,7 +123,7 @@ public class RecipeDao extends DBConnectpool {
 
 	public int insertRecipe(RecipeDto dto) {
 		int result = 0;
-		String sql = "insert into recipe (user_idx,recipe_name,recipe_desc,recipe_people,recipe_time,recipe_difficulty,recipe_image_url) values(?,?,?,?,?,?,?)";
+		String sql = "insert into recipe (user_idx,recipe_name,recipe_desc,recipe_people,recipe_time,recipe_difficulty,recipe_image_url,cate1,cate2) values(?,?,?,?,?,?,?,?,?)";
 		try {
 			psmt = con.prepareStatement(sql);
 			psmt.setString(1, dto.getUser_idx());
@@ -109,6 +133,9 @@ public class RecipeDao extends DBConnectpool {
 			psmt.setString(5, dto.getRecipe_time());
 			psmt.setString(6, dto.getRecipe_difficulty());
 			psmt.setString(7, dto.getRecipe_image_url());
+			psmt.setString(8, dto.getCate1());
+			psmt.setString(9, dto.getCate2());
+
 			result = psmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("실패");

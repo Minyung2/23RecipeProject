@@ -1,7 +1,6 @@
 package recipe.controller;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,23 +19,35 @@ import recipe.dto.RecipeDto;
 public class RecipeListController extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int currentPage;
 		RecipeDao dao = new RecipeDao();
+		List<RecipeDto> list;
+		int totalCount;
+		int pageSize = 10;
+		String page=request.getParameter("page");
+		if(page==null || page.trim().length()==0) currentPage=1;
+		else currentPage = Integer.parseInt(page);
 		
-		int pageNo;
-		if(request.getParameter("page")==null) pageNo=1;
-		else pageNo = Integer.parseInt(request.getParameter("page"));   //page=1,2,3,4,.....
-
-		int pageSize =10;	
-		PageDto pageDto = new PageDto(pageNo,dao.getCount(),pageSize);  //페이지처리에 필요한객체(값) 생성
-		Map<String,Integer> map = new HashMap<>();
-		map.put("pageSize",pageSize);
-		map.put("startNo",pageDto.getStartNo());
-		List<RecipeDto> list = dao.getList(map);
+		String findText = request.getParameter("findText");
+		String field = request.getParameter("field");
+		Map<String, Object> map = new HashMap<>();
+		if(findText!=null) {
+			map.put("field",field);
+			map.put("findText",findText);
+		}
+		// 총 게시글 수를 구합니다.
+		totalCount= dao.getCount(map);
+		dao.close();
 		
-		request.setAttribute("today", LocalDate.now());
-		request.setAttribute("pageDto", pageDto);     //페이지처리에 필요한 값들
+		System.out.println(totalCount);
+		// 현재 페이지 정보를 바탕으로 페이징 정보를 계산합니다.
+		PageDto pageDto = new PageDto(currentPage, totalCount, pageSize, field, findText);
+		System.out.println(pageDto);
+		// 해당 페이지에 해당하는 게시글 리스트를 DAO를 통해 조회합니다.
+		list = dao.getList(pageDto);
+		// 검색어와 검색 필드, 페이징 정보를 Attribute로 설정하고 JSP로 forward합니다.
 		request.setAttribute("list", list);
-		
-		request.getRequestDispatcher("../RecipeProject/RecipeList.jsp").forward(request, response);
+		request.setAttribute("page", pageDto);
+		request.getRequestDispatcher("../RecipeProject/RecipeList.jsp?page=?"+page+"&field="+field+"&findText="+findText).forward(request, response);
 	}
 }

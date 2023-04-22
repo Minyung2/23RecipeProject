@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 
 import recipe.dao.UsersDao;
 import recipe.dto.SessionDto;
-import recipe.dto.UsersDto;
 
 @WebServlet("/project/loginCheck.do")
 public class LoginController extends HttpServlet {
@@ -39,6 +38,7 @@ public class LoginController extends HttpServlet {
 		else {
 			resp.sendRedirect("../RecipeProject/Login.jsp");
 		}
+		dao.close();
 	}
 	
 	

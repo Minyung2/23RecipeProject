@@ -103,6 +103,7 @@
 						<c:forEach var="commentList" items="${commentList}">
 						<div class="comment_user_info">
 							<h4>${commentList.user_nickname}</h4>
+							<c:if test="${sessionScope.user.user_idx==commentList.user_idx}"> <button type="button" class="delete_comment" data-comment-id="${commentList.comment_id}">삭제</button></c:if>
 						</div>
 						<div class="comment_content">${commentList.comment_content}</div>
 						<hr class="divider"/>
@@ -154,10 +155,14 @@
 		        $('#recipe_comment .review_title span').text(commentCount);
 		        $('#recipe_comment .comment_user_info').remove();
 		        $('#recipe_comment .comment_content').remove();
+		        $('#recipe_comment .delete_comment').remove();
 		        $('.divider').remove();
 		        for(var i=0; i<commentCount; i++) {
 		          var comment = commentList[i];
 		          var html = '<div class="comment_user_info"><h4>' + comment.user_nickname + '</h4></div>';
+		        if (comment.user_idx == '${sessionScope.user.user_idx}') {
+		  			html += '<button type="button" class="delete_comment" data-comment-id="' + comment.comment_id + '">삭제</button>';
+		  		}
 		          html += '<div class="comment_content">' + comment.comment_content + '</div>';
 		          html += '<hr class="divider">';
 		          $('#recipe_comment .review_title').append(html);
@@ -170,6 +175,47 @@
 		    });
 		    return false;
 		  });
+	});
+	
+	$(document).on('click', '.delete_comment', function() {
+		var commentId = $(this).data('comment-id');
+		var data = {
+			comment_id: commentId,
+			recipe_id: '${recipeDto.recipe_id}',
+			user_idx: '${sessionScope.user.user_idx}',
+		};
+		$.ajax({
+			type: 'POST',
+			url: '../project/commentDelete.do',
+			data: data,
+			dataType: 'json',
+		success: function(response) {
+		// 댓글 갱신
+		var commentList = response;
+		var commentCount = commentList.length;
+		$('#recipe_comment .review_title span').text(commentCount);
+		$('#recipe_comment .comment_user_info').remove();
+		$('#recipe_comment .comment_content').remove();
+		$('#recipe_comment .delete_comment').remove();
+		$('.divider').remove();
+		console.log(commentCount);
+		for (var i = 0; i < commentCount; i++) {
+			var comment = commentList[i];
+			var html = '<div class="comment_user_info"><h4>' + comment.user_nickname + '</h4>';
+			if (comment.user_idx == '${sessionScope.user.user_idx}') {
+			html += '<button type="button" class="delete_comment" data-comment-id="' + comment.comment_id + '">삭제</button>';
+		}
+			html += '</div>';
+			html += '<div class="comment_content">' + comment.comment_content + '</div>';
+			html += '<hr class="divider">';
+			$('#recipe_comment .review_title').append(html);
+		}
+			$('textarea[name=comment_content]').val('');
+		},
+			error: function(xhr, status, error) {
+			console.log(error);
+		}
+		});
 		});
 	</script>
 </body>

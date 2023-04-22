@@ -128,7 +128,42 @@ $(document).on('change', '.fileUpload', function(){
     
     
 // 유효성 검사
-function post_data() {
-	/* 유효성 검사 */
-	frm1.submit();
+function validateForm(form){
+  var fileField = form.querySelector('input[type="file"]');
+  const ingredients = form.ingredients;
+  let ingredientCount = 0;
+  for (let i = 0; i < ingredients.length; i++) {
+    if (ingredients[i].value.trim() !== '') {
+      ingredientCount++;
+    }
+  }
+  const cookingSteps = form.cooking_steps;
+  let cookingStepCount = 0;
+  for (let i = 0; i < cookingSteps.length; i++) {
+    if (cookingSteps[i].value.trim() !== '') {
+      cookingStepCount++;
+    }
+  }  
+  if(form.recipe_name.trim().value==""){
+    alert("제목을 입력하지 않았습니다.");
+    form.title.focus();
+    return false;
+  } else if(form.recipe_desc.value==""){
+    alert("내용을 입력하지 않았습니다.");
+    form.content.focus();
+    return false;
+  }else if(fileField && fileField.value === ''){
+    alert('파일을 선택하세요.');
+    return false;
+  } else if(ingredientCount === 0){
+    alert('최소 한개 이상의 재료를 입력해주세요.');
+    return false;
+  } else if (cookingStepCount === 0) {
+    alert('최소 한개 이상의 요리순서를 입력해주세요.');
+    return false;
+  }else if(form.mainPhotoUpload.trim().length === 0){
+	alert('메인 사진을 입력해주세요')
+	return false;  
+  }
+  return true;
 }

@@ -34,8 +34,6 @@ public class UsersDao extends DBConnectpool {
 			psmt.setString(1, id);
 			rs=psmt.executeQuery();
 			if(rs.next()) {
-				dto.setUser_id(rs.getString("user_id"));
-				dto.setUser_name(rs.getString("user_name"));
 				dto.setUser_nickname(rs.getString("user_nickname"));
 				dto.setUser_idx(rs.getString("user_idx"));
 			}

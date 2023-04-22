@@ -56,6 +56,12 @@ public class RecipeViewController extends HttpServlet{
 		req.setAttribute("commentList", commentList);
 		req.setAttribute("commentCount", commentCount);
 		req.setAttribute("reviewImgList", reviewImgList);
+		recipeDao.close();
+		recipeIngredientDao.close();
+		stepDao.close();
+		ReviewDao.close();
+		commentDao.close();
+		ReviewImageDao.close();
 		req.getRequestDispatcher("../RecipeProject/RecipeView.jsp").forward(req, resp);
 	}
 }

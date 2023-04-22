@@ -33,7 +33,7 @@ public class CommentWriteController extends HttpServlet{
         
         Gson gson = new Gson();
         String json = gson.toJson(commentList);
-     
+        dao.close();
         
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");

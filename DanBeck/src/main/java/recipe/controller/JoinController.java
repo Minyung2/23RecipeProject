@@ -45,5 +45,6 @@ public class JoinController extends HttpServlet{
 		}else {
 			Alert.alertLocation(resp, "가입이 되지 않았습니다", "../project/join.do");
 		}
+		dao.close();
 	}
 }
