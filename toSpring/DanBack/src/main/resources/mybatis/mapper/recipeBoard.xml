@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.danback.recipeboard.dao.RecipeBoardMapper">
+
+	<select id="getList"
+		parameterType="com.project.danback.recipeboard.model.PageDto"
+		resultType="com.project.danback.recipeboard.model.RecipeBoardDto">
+		SELECT r.*, u.user_nickname FROM recipe r
+		INNER JOIN users u ON u.user_idx = r.user_idx
+		<choose>
+			<when test="cate1 != null and (cate2 == null or cate2 =='')">
+				INNER JOIN recipe_category_kind rck1 ON rck1.category_kind_idx = r.cate1
+				WHERE rck1.category_kind_type = '방법별'
+				AND rck1.category_kind_idx = #{cate1}
+			</when>
+			<when test="(cate1 == null or cate1 =='') and cate2 != null">
+				INNER JOIN recipe_category_kind rck2 ON rck2.category_kind_idx = r.cate2
+				WHERE rck2.category_kind_type = '재료별'
+				AND rck2.category_kind_idx = #{cate2}
+			</when>
+			<when test="cate1 != null and cate2 != null">
+				INNER JOIN recipe_category_kind rck1 ON rck1.category_kind_idx = r.cate1
+				INNER JOIN recipe_category_kind rck2 ON rck2.category_kind_idx = r.cate2
+				WHERE rck1.category_kind_type = '방법별' AND rck2.category_kind_type = '재료별'
+				AND rck1.category_kind_idx = #{cate1} AND rck2.category_kind_idx = #{cate2}
+			</when>
+		</choose>
+		ORDER BY recipe_id DESC LIMIT #{startNo}, #{pageSize}
+	</select>
+
+	<select id="getCount" parameterType="java.util.Map"
+		resultType="Integer">
+		
+		<choose>
+			<when test="cate1 != null and (cate2 == null or cate2 =='')">
+			SELECT COUNT(*) FROM recipe r
+			INNER JOIN recipe_category_kind rck 
+			ON rck.category_kind_idx = r.cate1 
+			WHERE rck.category_kind_type ='방법별' 
+			AND CAST(rck.category_kind_idx AS SIGNED ) = #{cate1}
+			</when>
+			<when test="(cate1 == null or cate1 =='') and cate2 != null">
+			SELECT COUNT(*) FROM recipe r
+			INNER JOIN recipe_category_kind rck 
+			ON rck.category_kind_idx = r.cate2 
+			WHERE rck.category_kind_type ='재료별' 
+			AND CAST(rck.category_kind_idx AS SIGNED ) = #{cate2}
+			</when>
+			<when test="cate1 != null and cate2 != null">
+			SELECT COUNT(*) FROM recipe r
+			INNER JOIN recipe_category_kind rck 
+			ON rck.category_kind_idx = r.cate1 
+			INNER JOIN recipe_category_kind rck2
+			ON rck2.category_kind_idx = r.cate2 
+			WHERE rck.category_kind_type ='방법별'
+			AND rck2.category_kind_type ='재료별'
+			AND CAST(rck.category_kind_idx AS SIGNED ) = #{cate1}
+			AND CAST(rck2.category_kind_idx AS SIGNED ) = #{cate2}
+			</when>
+			<otherwise>
+			SELECT COUNT(*) FROM recipe r
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="cate1List"
+		resultType="com.project.danback.recipeboard.model.RecipeCategoryTypeDto">
+		select * from recipe_category_kind where category_kind_type
+		= '방법별'
+	</select>
+	<select id="cate2List"
+		resultType="com.project.danback.recipeboard.model.RecipeCategoryTypeDto">
+		select * from recipe_category_kind where category_kind_type
+		= '재료별'
+	</select>
+	
+	<select id="detailView" resultType="com.project.danback.recipeboard.model.RecipeBoardDto" parameterType="String">
+		select * from recipe where recipe_id=#{recipe_id}
+	</select>
+	
+	<select id="stepDetailView" resultType="com.project.danback.recipeboard.model.RecipeStepDto" parameterType="String">
+		select * from recipe_step where recipe_id=#{recipe_id} order by step_id
+	</select>
+	
+	<select id="ingreDetailView" resultType="com.project.danback.recipeboard.model.RecipeIngredientDto" parameterType="String">
+		select * from recipe_ingredient where recipe_id=#{recipe_id}
+	</select>
+	
+	<select id="getReviewCount" resultType="int" parameterType="String">
+		select count(*) from review where recipe_id=#{recipe_id}	
+	</select>
+	
+	<select id="reviewDetailView" resultType="com.project.danback.recipeboard.model.RecipeReviewDto" parameterType="String">
+		select r.*, u.user_nickname from review r, users u where u.user_idx=r.user_idx and recipe_id=#{recipe_id} order by review_id
+	</select>
+	
+	<select id="reviewImgDetailView" resultType="com.project.danback.recipeboard.model.ReviewImgDto" parameterType="String">
+		select * from review_img where review_id=#{review_id}
+	</select>
+	
+	<select id="getCommentCount" resultType="int" parameterType="String">
+		select count(*) from recipe_comment where recipe_id=#{recipe_id}
+	</select>
+	
+	<select id="commentDetailView" resultType="com.project.danback.recipeboard.model.RecipeCommentDto" parameterType="String">
+		select rc.*,u.user_nickname  from recipe_comment rc,users u  where u.user_idx =rc.user_idx and recipe_id=#{recipe_id}
+	</select>
+	
+	<insert id="writeComment" keyProperty="comment_id" useGeneratedKeys="true" parameterType="com.project.danback.recipeboard.model.RecipeCommentDto">
+		insert into recipe_comment(recipe_id,user_idx,comment_content) values(#{recipe_id},#{user_idx},#{comment_content})
+	</insert>
+	
+</mapper>
