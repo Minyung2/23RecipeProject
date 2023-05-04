@@ -6,5 +6,5 @@ import lombok.Data;
 public class RecipeCategoryTypeDto {
 	private String category_kind_idx;
 	private String category_kind_name;
-	private String category_idx;
+	private String category_kind_type;
 }

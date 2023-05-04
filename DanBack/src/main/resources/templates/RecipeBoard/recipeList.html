@@ -75,11 +75,13 @@ a.button:hover{
     <tr>
       <th>방법별</th>
       <td><a th:href="@{recipeList(page=1)}">전체</a></td>
-        <td><a th:class="cate_list" th:href="@{recipeList(page=1),(cate1=${cate1List.category_kind_idx}&amp;),(cate2=${param.cate2})}" th:each="cate1List : ${cate1List}" th:text="${cate1List.category_kind_name}&nbsp"></a></td>
+           <td><a class="cate_list"  th:each="cate1List, stat : ${cate1List}" th:href="@{/recipeList(page=1, cate1=${cate1List.category_kind_idx}, cate2=${param.cate2})}" th:text="${cate1List.category_kind_name}">&nbsp;</a></td>
     </tr>
     <tr>
       <th>재료별</th>
-        <td><a th:class="cate_list" th:href="@{recipeList(page=1),(cate1=${param.cate1}&amp;)(cate2=${cate2List.category_kind_idx})}" th:each="cate2List : ${cate2List}" th:text="${cate2List.category_kind_name}&nbsp"></a></td>
+        <td >
+          <a class="cate_list" th:each="cate2List,  stat : ${cate2List}" th:href="@{/recipeList(page=1, cate1=${param.cate1}, cate2=${cate2List.category_kind_idx})}" th:text="${cate2List.category_kind_name}">&nbsp;</a></td>
+        </td>
     </tr>
   </table>
 </div>
@@ -94,8 +96,8 @@ a.button:hover{
     </tr>
     <tr th:each="rec : ${list}">
         <td th:text="${page.totalCount-((page.currentPage-1)*page.pageSize)-recStat.index}"></td>
-        <td><img th:src="${pageContext.request.contextPath}/Storage/${rec.recipe_image_url}" th:style="width: 150px;height: 150px;"/>
-        <td><a th:href="recipeDetail?recipe_id=${rec.recipe_id}" th:text="${rec.recipe_name}"></a></td>
+      <td><img th:src="@{${#httpServletRequest.contextPath}/Storage/{rec.recipe_image_url}}" th:style="'width: 150px; height: 150px;'"/></td>
+      <td><a th:href="@{recipeDetail(recipe_id=${rec.recipe_id})}" th:text="${rec.recipe_name}"></a></td>
         <td th:text="${rec.user_nickname}"></td>
         <td th:text="${rec.recipe_visitcount}"></td>
     </tr>
@@ -106,15 +108,15 @@ a.button:hover{
   <div th:if="${cate1==null&&cate2==null}">
     <div th:style="${'text-align:center;'}">
       <a th:class="pagenum" th:href="@{page=1}">&lt;&lt;</a>
-      <a th:class="[[${page.startPage>1}]]? 'pagenum':'none'}" th:href="@{page=${page.startPage-1 }}">&lt;</a>
+      <a th:class="${page.startPage>1 ? 'pagenum' : 'none'}" th:href="@{page=(${page.startPage-1 })}">&lt;</a>
       <!-- 현재페이지값을 변경 : blists.getStartPage() -1 -->
-      <div th:var="i" th:begin="${page.startPage }" th:end="${page.endPage}">  <!-- 페이지목록의 범위  -->
-        <a th:class="pagenum" th:href="?page=${i}">${i}</a>
+      <div th:var="i" th:begin="${page.startPage}" th:end="${page.endPage}">
+        <a th:class="pagenum" th:href="@{?page=${i}}">${i}</a>
       </div>
 
       <!-- 현재페이지값을 변경 : blists.getEndPage() +1 -->
-      <a th:class="${page.endPage!=totalPage? 'pagenum':'none'}" th:href="?page=${page.endPage+1 }">&gt;</a>
-      <a th:class="pagenum" th:href="?page=${page.totalPage }">&gt;&gt;</a>
+      <a th:class="${page.endPage!=totalPage}? 'pagenum' : 'none'" th:href="@{${'page=' + (page.endPage + 1)}}">&gt;</a>
+      <a th:class="pagenum" th:href="@{${'page=' + (page.totalPage) }}">&gt;&gt;</a>
     </div>
   </div>
 </div>
