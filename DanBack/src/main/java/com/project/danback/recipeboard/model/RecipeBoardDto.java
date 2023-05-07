@@ -1,8 +1,14 @@
 package com.project.danback.recipeboard.model;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.sql.Timestamp;
 
 @Data
+@Getter
+@Setter
 public class RecipeBoardDto {
 	private String recipe_id;
 	private String user_idx;
@@ -17,4 +23,5 @@ public class RecipeBoardDto {
 	private String cate1;
 	private String cate2;
 	private String category_kind_name;
+	private Timestamp recipe_reg_date;
 }

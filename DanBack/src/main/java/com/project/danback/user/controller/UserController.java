@@ -41,9 +41,7 @@ public class UserController {
 		System.out.println(user.getUser_pw());
 		String encryptedPassword = bCryptPasswordEncoder.encode(inputPassword);
 		user.setUser_pw(encryptedPassword);
-		Collection<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-		user.setAuthorities(authorities);
+		user.setAuthority("ROLE_USER");
 		dao.joinUser(user);
 		return "redirect:/";
 	}

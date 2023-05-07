@@ -70,7 +70,7 @@ var steps = [
 $(function(){
 	$('#addStepDetailGroup').on('click',function(){
 		var currentStepString = steps[currentStepIndex];
-		var newDivItem = $('<div class="step_div"><p class="step_p">🔻</p><div id="step_div_text'+currentStepIdIndex+'"><textarea name="step_text[]" class="form-control step_cont" placeholder="'+currentStepString+'"></textarea></div><div id="step_div_photo'+currentStepIdIndex+'"><img id="step_img_photo'+currentStepIdIndex+'" class="stepDivPhoto" src="../projectResources/img/imageAdd.png"><input type="file" name="fileUpload" class="fileUpload" id="fileUpload'+currentStepIdIndex+'" style="display: none;"></div><img id="step_div_text'+currentStepIdIndex+'_delBtn" class="stepDelBtn" src="../projectResources/img/file-x.svg"><br></div>');
+		var newDivItem = $('<div class="step_div"><p class="step_p">🔻</p><div id="step_div_text'+currentStepIdIndex+'"><textarea name="step_desc[]" class="form-control step_cont" placeholder="'+currentStepString+'"></textarea></div><div id="step_div_photo'+currentStepIdIndex+'"><th:img name="step_image_url[]" id="step_img_photo'+currentStepIdIndex+'" class="stepDivPhoto" src="../projectResources/img/imageAdd.png"><input type="file" name="fileUpload" class="fileUpload" id="fileUpload'+currentStepIdIndex+'" style="display: none;"></div><img id="step_div_text'+currentStepIdIndex+'_delBtn" class="stepDelBtn" src="../projectResources/img/file-x.svg"><br></div>');
 		newDivItem.attr('id',"step_div"+currentStepIdIndex);
 		currentStepIdIndex++;
 		$('.step_row').append(newDivItem);

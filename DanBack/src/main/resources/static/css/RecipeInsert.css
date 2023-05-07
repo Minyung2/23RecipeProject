@@ -1,5 +1,6 @@
 @charset "UTF-8";
-@charset "UTF-8";
+
+
 
 .ingreTextList{
 	list-style: none;
@@ -21,8 +22,8 @@
   cursor: pointer;
 }
 .form-control ingreInput{
-	width: 200px;
-}	
+width: 200px;
+}
 
 input::placeholder {
   white-space: pre-wrap;
@@ -34,12 +35,8 @@ input::placeholder {
 .img{
 	width: 100%;
 }
-.stepDivPhoto{
-	width:160px; 
-	height:160px; 
-	cursor:pointer;
-	border: 1px solid grey;
-}
+
+
 .step_p{
 	padding-top: 50px;
 }
@@ -57,9 +54,16 @@ input::placeholder {
   display: flex; 
   align-items: center; 
 }
+.stepDivPhoto{
+	width:160px;
+	height:160px;
+	cursor:pointer;
+	border: 1px solid grey;
+}
+
 
 .recipe_stpe_detail textarea, 
 .recipe_stpe_detail img {
-  display: inline-block; 
-  vertical-align: middle; 
+  display: inline-block;
+  vertical-align: middle;
 }

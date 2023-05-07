@@ -30,9 +30,11 @@ public class WebSecurityConfig {
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable().cors().disable();
 		http.authorizeHttpRequests(request -> request.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-				.requestMatchers("/css/**", "/js/**", "/img/**,/topbottom/**").permitAll().requestMatchers("/**").permitAll()
+//				.requestMatchers("/css/**", "/js/**", "/img/**,/topbottom/**","/recipeList","/recipeWrite").permitAll()
+//				.requestMatchers("/**").hasRole("USER").anyRequest().authenticated()
 //				.requestMatchers("/guest/**").permitAll()
 //				.requestMatchers("/RecipeBoard/**").hasAnyRole("USER", "ADMIN").anyRequest().authenticated()
+						.anyRequest().permitAll()
 		);
 		
 		http.formLogin().loginPage("/login")

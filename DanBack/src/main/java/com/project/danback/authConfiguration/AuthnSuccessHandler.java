@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import com.project.danback.utility.GetAuthorityUtility;
@@ -31,6 +32,7 @@ public class AuthnSuccessHandler implements AuthenticationSuccessHandler {
 			target = "/";
 		} else if (authList.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"))) {
 			target = "/";
+			Authentication a = SecurityContextHolder.getContext().getAuthentication();
 		}
 		response.sendRedirect(target);
 	}

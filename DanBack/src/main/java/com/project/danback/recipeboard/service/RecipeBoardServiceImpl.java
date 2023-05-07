@@ -21,10 +21,10 @@ public class RecipeBoardServiceImpl implements RecipeBoardService{
 
 	@Autowired
 	RecipeBoardMapper dao;
+
 	
 	@Override
 	public int getCount(Map<String,Object> map) {
-		System.out.println(dao.getCount(map));
 		return dao.getCount(map);
 	}
 
@@ -57,6 +57,25 @@ public class RecipeBoardServiceImpl implements RecipeBoardService{
 	public List<RecipeIngredientDto> ingreDetailView(String recipe_id) {
 		return dao.ingreDetailView(recipe_id);
 	}
+
+	@Override
+	public void save(RecipeBoardDto recipeBoardDto) {
+		dao.save(recipeBoardDto);
+	}
+
+	@Override
+	public void stepSave(RecipeStepDto recipeStepDto) {
+		dao.stepSave(recipeStepDto);
+	}
+	@Override
+	public void ingredientSave(RecipeIngredientDto recipeIngredientDto){
+		dao.ingredientSave(recipeIngredientDto);
+	}
+	@Override
+	public String getLastRecipeId() {
+		return dao.getLastRecipeId();
+	}
+
 
 	@Override
 	public List<RecipeReviewDto> reviewDetailView(String recipe_id) {

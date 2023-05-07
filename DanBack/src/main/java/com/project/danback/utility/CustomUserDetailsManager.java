@@ -29,9 +29,8 @@ public class CustomUserDetailsManager implements UserDetailsService {
 	            throw new UsernameNotFoundException("User not found with username: " + user_id);
 	        }
 	        String authority = userMapper.findAuthorityByUsername(user_id);
-	        Collection<GrantedAuthority> authorities = new ArrayList<>();
-	        authorities.add(new SimpleGrantedAuthority(authority));
-	        user.setAuthorities(authorities);
+			System.out.println(authority);
+	        user.setAuthority(authority);
 	        
 	        return user;
 	    }

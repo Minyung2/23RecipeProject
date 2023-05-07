@@ -9,17 +9,17 @@
 		SELECT r.*, u.user_nickname FROM recipe r
 		INNER JOIN users u ON u.user_idx = r.user_idx
 		<choose>
-			<when test="cate1 != null and (cate2 == null or cate2 =='')">
+			<when test="(cate1 != null and cate1 != '') and (cate2 == null or cate2 =='')">
 				INNER JOIN recipe_category_kind rck1 ON rck1.category_kind_idx = r.cate1
 				WHERE rck1.category_kind_type = '방법별'
 				AND rck1.category_kind_idx = #{cate1}
 			</when>
-			<when test="(cate1 == null or cate1 =='') and cate2 != null">
+			<when test="(cate1 == null or cate1 =='') and (cate2 != null and cate2 !='')">
 				INNER JOIN recipe_category_kind rck2 ON rck2.category_kind_idx = r.cate2
 				WHERE rck2.category_kind_type = '재료별'
 				AND rck2.category_kind_idx = #{cate2}
 			</when>
-			<when test="cate1 != null and cate2 != null">
+			<when test="(cate1 != null and cate1 != '') and (cate2 != null and cate2 != '') ">
 				INNER JOIN recipe_category_kind rck1 ON rck1.category_kind_idx = r.cate1
 				INNER JOIN recipe_category_kind rck2 ON rck2.category_kind_idx = r.cate2
 				WHERE rck1.category_kind_type = '방법별' AND rck2.category_kind_type = '재료별'
@@ -33,21 +33,21 @@
 		resultType="Integer">
 		
 		<choose>
-			<when test="cate1 != null and (cate2 == null or cate2 =='')">
+			<when test="(cate1 != null and cate1 != '') and (cate2 == null or cate2 =='')">
 			SELECT COUNT(*) FROM recipe r
 			INNER JOIN recipe_category_kind rck 
 			ON rck.category_kind_idx = r.cate1 
 			WHERE rck.category_kind_type ='방법별' 
 			AND CAST(rck.category_kind_idx AS SIGNED ) = #{cate1}
 			</when>
-			<when test="(cate1 == null or cate1 =='') and cate2 != null">
+			<when test="(cate1 == null or cate1 =='') and (cate2 != null and cate2 !='')">
 			SELECT COUNT(*) FROM recipe r
 			INNER JOIN recipe_category_kind rck 
 			ON rck.category_kind_idx = r.cate2 
 			WHERE rck.category_kind_type ='재료별' 
 			AND CAST(rck.category_kind_idx AS SIGNED ) = #{cate2}
 			</when>
-			<when test="cate1 != null and cate2 != null">
+			<when test="(cate1 != null and cate1 != '') and (cate2 != null and cate2 != '') ">
 			SELECT COUNT(*) FROM recipe r
 			INNER JOIN recipe_category_kind rck 
 			ON rck.category_kind_idx = r.cate1 
@@ -63,6 +63,25 @@
 			</otherwise>
 		</choose>
 	</select>
+
+	<insert id="save" parameterType="com.project.danback.recipeboard.model.RecipeBoardDto">
+		INSERT INTO recipe (user_idx,recipe_name,recipe_desc,recipe_people,recipe_time,recipe_difficulty,recipe_image_url,cate1,cate2)
+		VALUES (#{user_idx},#{recipe_name},#{recipe_desc},#{recipe_people},#{recipe_time},#{recipe_difficulty},#{recipe_image_url},#{cate1},#{cate2});
+	</insert>
+
+	<select id="getLastRecipeId" resultType="String">
+		SELECT recipe_id FROM recipe WHERE recipe_id = (SELECT MAX(recipe_id) FROM recipe)
+	</select>
+
+	<insert id="stepSave" parameterType="com.project.danback.recipeboard.model.RecipeStepDto">
+		INSERT INTO danback.recipe_step (recipe_id,step_desc,step_image_url)
+		VALUES (#{recipe_id},#{step_desc},#{step_image_url});
+	</insert>
+
+	<insert id="ingredientSave" parameterType="com.project.danback.recipeboard.model.RecipeIngredientDto">
+		INSERT INTO danback.recipe_ingredient (recipe_id,ingredient_name,ingredient_amount)
+		VALUES (#{recipe_id},#{ingredient_name},#{ingredient_amount});
+	</insert>
 
 	<select id="cate1List"
 		resultType="com.project.danback.recipeboard.model.RecipeCategoryTypeDto">

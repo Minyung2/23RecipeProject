@@ -1,8 +1,10 @@
 package com.project.danback.user.dto;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Data;
@@ -25,7 +27,9 @@ public class UsersDto implements UserDetails {
 	private String user_address;
 	private String user_phone;
 	private int enabled;
-	private Collection<? extends GrantedAuthority> authorities;
+
+	private String authority;
+
 	
 
 
@@ -96,20 +100,17 @@ public class UsersDto implements UserDetails {
 	public void setEnabled(int enabled) {
 	    this.enabled = enabled;
 	}
-	
-	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
-		this.authorities = authorities;
-	}
+
+	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-	     return this.authorities;
+
+        Collection<GrantedAuthority> collect = new ArrayList<>();
+        collect.add(new SimpleGrantedAuthority(this.getAuthority()));
+        return collect;
+
+
 	}
-	
-	public String getAuthority() {
-	    if (authorities != null && !authorities.isEmpty()) {
-	        return authorities.iterator().next().getAuthority();
-	    }
-	    return null;
-	}
+
 	@Override
 	public String getPassword() {
 		return user_pw;
@@ -140,4 +141,11 @@ public class UsersDto implements UserDetails {
 		return enabled == 1;
 	}
 
+	public void setAuthority(String authority) {
+		this.authority = authority;
+	}
+
+	public String getAuthority() {
+		return authority;
+	}
 }

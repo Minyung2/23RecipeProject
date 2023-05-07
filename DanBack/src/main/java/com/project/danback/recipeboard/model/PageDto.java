@@ -26,16 +26,16 @@ public class PageDto {
 	    this.pageSize = pageSize;
 	    this.totalCount = totalCount;
 	    totalPage = (totalCount + pageSize - 1) / pageSize;
-	    
+
 	    this.currentPage = (currentPage > totalPage || currentPage < 1) ? 1 : currentPage;
 	    startNo = (this.currentPage - 1) * pageSize;
-	    
+
 	    startPage = ((this.currentPage - 1) / 10) * 10 + 1;
 	    endPage = startPage + 9;
 	    if (endPage > totalPage) {
 	        endPage = totalPage;
 	    }
-	    
+
 	    this.cate1 = cate1;
 	    this.cate2 = cate2;
 	}
