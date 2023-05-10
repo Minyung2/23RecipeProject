@@ -235,6 +235,8 @@ function displayPlaces(places) {
             itemEl.onmouseout =  function () {
                 infowindow.close();
             };
+
+            // List 클릭시 거기로 이동하시오
             itemEl.addEventListener('click', function(){
                             removeMyMarker(centerMarker);
                             center = placePosition;

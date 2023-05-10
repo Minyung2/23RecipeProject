@@ -9,4 +9,9 @@ public class HomeController {
     public String home(){
         return "home";
     }
+
+    @RequestMapping("/map")
+    public String getMap(){
+        return "map/map";
+    }
 }
