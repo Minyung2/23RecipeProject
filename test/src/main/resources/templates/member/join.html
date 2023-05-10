@@ -2,131 +2,51 @@
 <html lang="kr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Slave Contract Form</title>
+    <title>Slavery Contract Form</title>
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script th:src="@{/javascript/join.js}"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f7a26a0611abfcd9aba74eb1c9fccedd&libraries=services"></script>
+    <link th:rel="styleSheet" th:href="@{/css/join.css}">
+
 </head>
 <style>
-    .map_wrap {position:relative;width:100%;height:350px;}
-    .title {font-weight:bold;display:block;}
-    .hAddr {position:absolute;left:10px;top:10px;border-radius: 2px;background:#fff;background:rgba(255,255,255,0.8);z-index:1;padding:5px;}
-    #centerAddr {display:block;margin-top:2px;font-weight: normal;}
-    .bAddr {padding:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+
 </style>
 <body>
 <h2>Reboot</h2>
 <div>
     <input th:type="text" th:name="memberId" th:placeholder="'아이디'"/><br>
     <input th:type="password" th:name="memberPassword" th:placeholder="'비번임'"/><br>
-    <input th:type="text" th:id="search" th:name="search" th:placeholder="'암거래 장소 어디로 잡을까요?'"/><input th:id="searchBtn" th:type="button" th:value="'이딴것도 버튼이라고'"> <br><br>
 </div>
 <!--<div id="map" style="width:600px;height:600px;">-->
 
     <div class="map_wrap">
-        <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+        <div id="map" style="width:100%;height:100%;"></div>
         <div class="hAddr">
             <span class="title">지도중심기준 행정동 주소정보</span>
             <span id="centerAddr"></span>
         </div>
+        <div id="menu_wrap" class="bg_white">
+            <div class="option">
+                <div>
+                    <form onsubmit="searchPlaces(); return false;">
+                        키워드 : <input type="text" id="keyword" size="15">
+                        <button type="submit">검색하기</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <ul id="placesList"></ul>
+            <div id="pagination"></div>
+        </div>
     </div>
 
-    <div id="menu_wrap" class="bg_white">
-        <div class="option">
-            <div>
-                <form onsubmit="searchPlaces(); return false;">
-                    키워드 : <input type="text" value="이태원 맛집" id="keyword" size="15">
-                    <button type="submit">검색하기</button>
-                </form>
-            </div>
-        </div>
-        <hr>
-        <ul id="placesList"></ul>
-        <div id="pagination"></div>
-    </div>
+
 </div>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f7a26a0611abfcd9aba74eb1c9fccedd"></script>
-<script>
-	var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-    mapOption = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
-    };
-    var imageSrc = 'https://play-lh.googleusercontent.com/5WifOWRs00-sCNxCvFNJ22d4xg_NQkAODjmOKuCQqe57SjmDw8S6VOSLkqo6fs4zqis',
-    imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
-    imageOption = {offset: new kakao.maps.Point(27, 69)};
-    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-    var geocoder = new kakao.maps.services.Geocoder();
-    var searchBtn = document.querySelector('#searchBtn');
-    var myLocationMarker;
-    var marker;
-    var center;
-
-if (navigator.geolocation) {
-
-    // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-    navigator.geolocation.getCurrentPosition(function(position) {
-
-        var lat = position.coords.latitude, // 위도
-            lon = position.coords.longitude; // 경도
-
-        var locPosition = new kakao.maps.LatLng(lat, lon);
-
-        // 마커와 인포윈도우를 표시합니다
-        displayMarker(locPosition);
-      });
-
-} else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
-
-    var locPosition = new kakao.maps.LatLng(33.450701, 126.570667);
-
-    displayMarker(locPosition);
-}
-
-function displayMarker(locPosition) {
-
-    // 마커를 생성합니다
-        marker = new kakao.maps.Marker({
-                    map: map,
-                    position: locPosition
-             });
-        myLocationMarker = new kakao.maps.Marker({
-            map : map,
-            position : locPosition,
-            image : markerImage
-            });
-
-    // 지도 중심좌표를 접속위치로 변경합니다
-    map.setCenter(locPosition);
 
 
-}
-kakao.maps.event.addListener(map, 'dragend', updateMarkerPosition);
-
-function removeMarker(marker) {
-    if (marker) {
-        marker.setMap(null);
-    }
-}
-function updateMarkerPosition() {
-    removeMarker(marker);
-    center = map.getCenter();
-    console.log(center);
-    marker = new kakao.maps.Marker({
-                    map: map,
-                    position: center
-    });
-
-}
-
-
-
-
-
-
-
-
-</script>
+<script type="text/javascript" th:src="@{/js/join.js}"></script>
 
 </body>
 </html>
