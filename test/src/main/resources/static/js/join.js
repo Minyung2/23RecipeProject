@@ -38,6 +38,7 @@
     // 장소 검색 객체를 생성합니다
     var ps = new kakao.maps.services.Places();
 
+
 // 최초의 본인 위치 잡기 (위치 정보를 허용하시겠습니까? 부분 허용 후 실행됨)
 if (navigator.geolocation) {
     // GeoLocation을 이용해서 접속 위치를 얻어옵니다
@@ -196,7 +197,6 @@ function displayPlaces(places) {
     var listEl = document.getElementById('placesList'),
     menuEl = document.getElementById('menu_wrap'),
     fragment = document.createDocumentFragment(),
-
     bounds = new kakao.maps.LatLngBounds(),
     listStr = '';
 
@@ -207,22 +207,11 @@ function displayPlaces(places) {
     removeMarker();
 
     for ( var i=0; i<places.length; i++ ) {
-
         // 마커를 생성하고 지도에 표시합니다
         var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
             marker = addMarker(placePosition, i),
             itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
-                window.kakao.maps.event.addListener(marker, "click", function (mouseEvent) {
-                          props.setAddress(place);
-                          infowindow.setContent(`
-                          <span>
-                          ${place.place_name}
-                          </span>
-                          `);
-                          infowindow.open(map, marker);
-                          const moveLatLon = new window.kakao.maps.LatLng(place.y, place.x);
-                          map.panTo(moveLatLon);
-                        });
+
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
         // LatLngBounds 객체에 좌표를 추가합니다
         bounds.extend(placePosition);
@@ -230,7 +219,7 @@ function displayPlaces(places) {
         // 마커와 검색결과 항목에 mouseover 했을때
         // 해당 장소에 인포윈도우에 장소명을 표시합니다
         // mouseout 했을 때는 인포윈도우를 닫습니다
-        (function(marker, title) {
+        (function(marker, title, placePosition) {
             kakao.maps.event.addListener(marker, 'mouseover', function() {
                 displayInfowindow(marker, title);
             });
@@ -239,19 +228,25 @@ function displayPlaces(places) {
                 infowindow.close();
             });
 
-            itemEl.onmouseover =  function () {
+            /*itemEl.onmouseover =  function () {
                 displayInfowindow(marker, title);
-            };
-            var placePosition;
-            itemEl.addEventListener("click", function (e) {
-                            displayInfowindow(marker, title);
-                            props.setAddress(places[i]);
-                            map.panTo(placePosition);
-                          });
+            };*/ // 이거 병신이라 일단 주석처리
+
             itemEl.onmouseout =  function () {
                 infowindow.close();
             };
-        })(marker, places[i].place_name);
+            itemEl.addEventListener('click', function(){
+                            removeMyMarker(centerMarker);
+                            center = placePosition;
+                            centerMarker = new kakao.maps.Marker({
+                                        map: map,
+                                        position: center
+                                    });
+                            displayInfowindow(marker, title);
+                            map.setLevel(3);
+                            map.panTo(placePosition);
+                        });
+        })(marker, places[i].place_name, placePosition);
 
         fragment.appendChild(itemEl);
     }
