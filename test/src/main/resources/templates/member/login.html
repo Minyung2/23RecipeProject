@@ -7,7 +7,7 @@
 </head>
 <body>
   <img th:src="@{/image/bootstrap-reboot.svg}" th:style="'width:120px; height:120px;'"/>
-  <form role="form" method="post" action="/members/login">
+  <form role="form" method="post" action="/loginProcess">
       <div class="form-group">
           <label th:for="email">이메일주소</label>
           <input type="email" name="email" class="form-control" placeholder="이메일을 입력해주세요">
@@ -17,7 +17,7 @@
           <input type="password" name="password" id="password" class="form-control" placeholder="비밀번호 입력">
       </div>
       <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
-      <a id="kakao-login-btn" href="javascript:loginWithKakao()">
+      <a id="kakao-login-btn" href="login/oauth2/kakao">
           <img th:src="@{image/kakao_login_large_narrow.png}" width="222"
                alt="카카오 로그인 버튼" />
       </a>
