@@ -1,10 +1,8 @@
 package com.test.project.member.dto;
 
-import com.test.project.member.constant.OauthProvider;
+import com.test.project.member.constant.OAuthProvider;
 import com.test.project.member.constant.Role;
 import lombok.Data;
-import lombok.Getter;
-
 @Data
 public class MemberDto {
     private Long idx;
@@ -12,5 +10,5 @@ public class MemberDto {
     private String password;
     private String name;
     private Role role;
-    private OauthProvider oauthProvider;
+    private OAuthProvider OAuthProvider;
 }
