@@ -1,12 +1,14 @@
     package com.test.project.member.service;
 
-    import com.test.project.member.dto.SessionUser;
     import com.test.project.member.entity.User;
     import com.test.project.member.oauth2.OAuthAttributes;
     import com.test.project.member.repository.UserRepository;
     import jakarta.servlet.http.HttpSession;
     import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+    import org.springframework.security.core.Authentication;
     import org.springframework.security.core.authority.SimpleGrantedAuthority;
+    import org.springframework.security.core.context.SecurityContextHolder;
     import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
     import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
     import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -40,7 +42,12 @@
             OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
             User user = saveOrUpdate(attributes);
-            httpSession.setAttribute("user", new SessionUser(user));
+//            httpSession.setAttribute("user", new SessionUser(user));
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null) {
+                authentication = new UsernamePasswordAuthenticationToken(user, authentication.getCredentials(), authentication.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
 
             System.out.println(attributes.getAttributes());
             return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("USER"))
