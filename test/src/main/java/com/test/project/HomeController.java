@@ -12,6 +12,8 @@ public class HomeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             System.out.println(authentication.getName());
+            System.out.println(authentication.getPrincipal());
+
         }
         return "home";
     }
