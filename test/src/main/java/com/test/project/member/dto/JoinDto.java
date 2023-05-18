@@ -16,7 +16,6 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 public class JoinDto {
 
-
     @NotEmpty(message = "이메일은 필수 입력입니다.")
     @Email(message = "이메일 형식으로 입력해주세요.")
     private String email;

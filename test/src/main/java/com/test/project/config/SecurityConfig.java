@@ -38,7 +38,7 @@ public class SecurityConfig {
 //        http.csrf().disable();
         http.authorizeRequests()
                 .requestMatchers("/css/**", "/js/**", "/image/**").permitAll()
-                .requestMatchers("/login/**", "/join/**", "/").permitAll()
+                .requestMatchers("/login/**", "/join/**", "/map/**", "/").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().ignoringRequestMatchers(

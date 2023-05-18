@@ -286,25 +286,84 @@ function getListItem(index, places) {
 }
 
 // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
+//function addMarker(position, idx, title) {
+//    var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+//        imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
+//        imgOptions =  {
+//            spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+//            spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+//            offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+//        },
+//        markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+//            marker = new kakao.maps.Marker({
+//            position: position, // 마커의 위치
+//            image: markerImage
+//        });
+//
+//    marker.setMap(map); // 지도 위에 마커를 표출합니다
+//    markers.push(marker);  // 배열에 생성된 마커를 추가합니다
+//
+//    return marker;
+//}
 function addMarker(position, idx, title) {
-    var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
-        imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
-        imgOptions =  {
-            spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
-            spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
-            offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+    var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png',
+        imageSize = new kakao.maps.Size(36, 37),
+        imgOptions = {
+            spriteSize: new kakao.maps.Size(36, 691),
+            spriteOrigin: new kakao.maps.Point(0, (idx * 46) + 10),
+            offset: new kakao.maps.Point(13, 37)
         },
         markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
-            marker = new kakao.maps.Marker({
-            position: position, // 마커의 위치
+        marker = new kakao.maps.Marker({
+            position: position,
             image: markerImage
         });
 
-    marker.setMap(map); // 지도 위에 마커를 표출합니다
-    markers.push(marker);  // 배열에 생성된 마커를 추가합니다
+    marker.setMap(map);
+    markers.push(marker);
+
+    // 위치 정보와 행정동 주소를 저장
+    var latitude = position.getLat();
+    var longitude = position.getLng();
+    var address = '';
+
+    // 행정동 주소 정보 추출
+    for (var i = 0; i < result.length; i++) {
+        if (result[i].region_type === 'H') {
+            address = result[i].address_name;
+            break;
+        }
+    }
+
+    // 서버로 저장할 수 있는 방식으로 위치 정보와 행정동 주소를 전송
+    saveLocationToServer(latitude, longitude, address);
 
     return marker;
 }
+
+function saveLocationToServer(latitude, longitude, address) {
+       var token = $("meta[name='_csrf']").attr("content");
+         var header = $("meta[name='_csrf_header']").attr("content");
+    $.ajax({
+        type: 'POST',
+        url: '/saveLocation',
+        data: {
+            latitude: latitude,
+            longitude: longitude,
+            address: address
+        },
+        beforeSend: function(xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+        success: function (data) {
+            console.log('Location saved to server');
+        },
+        error: function (xhr, status, error) {
+            console.error('Failed to save location to server');
+        }
+    });
+}
+
 
 // 지도 위에 표시되고 있는 마커를 모두 제거합니다
 function removeMarker() {
