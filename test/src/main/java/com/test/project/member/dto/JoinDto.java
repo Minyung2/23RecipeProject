@@ -1,16 +1,19 @@
 package com.test.project.member.dto;
 
+import com.test.project.member.constant.Role;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class JoinDto {
 
 
@@ -23,16 +26,21 @@ public class JoinDto {
     @Length(min=8,max=16,message="비밀번호는 8자 이상, 16자 이하로 입력해주세요.")
     private String password;
 
-    @NotEmpty(message = "")
+    @NotEmpty(message = "필수")
     private String nickName;
 
-    @NotEmpty(message = "")
+    @Column(name="age_range")
+    @NotEmpty(message = "필수")
     private String ageRange;
 
-    @NotEmpty(message = "")
+    @NotEmpty(message = "필수")
     private String mobile;
 
-    @NotEmpty(message = "")
+    @NotEmpty(message = "필수")
     private String gender;
+
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER;
+
 
 }

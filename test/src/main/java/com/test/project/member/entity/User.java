@@ -5,6 +5,7 @@ import com.test.project.member.constant.Role;
 import com.test.project.member.dto.JoinDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
@@ -23,7 +24,7 @@ public class User {
     @Column(name="password")
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="name")
     private String name;
 
     @Column(nullable = false)
@@ -67,11 +68,12 @@ public class User {
         User user =new User();
         user.setEmail(joinDto.getEmail());
         user.setName(joinDto.getName());
-        String password =passwordEncoder.encode(joinDto.getPassword());
-        user.setName(joinDto.getNickName());
+        user.setPassword(passwordEncoder.encode(joinDto.getPassword()));
+        user.setNickName(joinDto.getNickName());
         user.setAgeRange(joinDto.getAgeRange());
         user.setMobile(joinDto.getMobile());
         user.setGender(joinDto.getGender());
+        user.setNickName(joinDto.getNickName());
         user.setRole(Role.USER);
         return user;
     }

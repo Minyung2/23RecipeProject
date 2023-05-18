@@ -36,8 +36,7 @@
             String userNameAttributeName = oAuth2UserRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
             OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
-            User user = userRepository.findByEmail(attributes.getEmail()).orElse(null);
-
+            User user = userRepository.findByEmail(attributes.getEmail());
 
             if (user == null) {
                 return new DefaultOAuth2User(
@@ -46,9 +45,13 @@
                         attributes.getNameAttributeKey()
                 );
             } else {
+                // 현재 인증 정보 확인
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                authentication = new UsernamePasswordAuthenticationToken(user, authentication.getCredentials(), authentication.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                if (authentication == null) {
+                    // 인증 정보가 없으면 새로 생성하여 설정
+                    authentication = new UsernamePasswordAuthenticationToken(user, null, Collections.singleton(new SimpleGrantedAuthority("USER")));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
 
                 return new DefaultOAuth2User(
                         Collections.singleton(new SimpleGrantedAuthority("USER")),
