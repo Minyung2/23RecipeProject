@@ -60,11 +60,5 @@
             }
         }
 
-        // 혹시 이미 저장된 정보라면, update 처리
-//        private User saveOrUpdate(OAuthAttributes attributes) {
-//            User user = userRepository.findByEmail(attributes.getEmail())
-//                    .map(entity -> entity.update(attributes.getName(), attributes.getEmail(), Role.USER, attributes.getAgeRange(), attributes.getMobile(), attributes.getGender()))
-//                    .orElse(attributes.toEntity());
-//            return userRepository.save(user);
-//        }
+
     }

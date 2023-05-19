@@ -3,17 +3,12 @@ package com.test.project.member.controller;
 import com.test.project.member.dto.JoinDto;
 import com.test.project.member.dto.JoinLocationDto;
 import com.test.project.member.entity.User;
-import com.test.project.member.entity.UserLocation;
-import com.test.project.member.repository.UserLocationRepository;
-import com.test.project.member.repository.UserRepository;
 import com.test.project.member.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,9 +51,11 @@ public class UserController {
             return "member/join";
         }
         try {
-            User user = userService.saveUserAndGetUser(joinDto, passwordEncoder);
+            User user = User.saveUser(joinDto, passwordEncoder);
+            userService.saveUser(user);
+            Long userId = userService.getUserId(user.getEmail());
             session.removeAttribute("joinDto");
-            session.setAttribute("userId", user.getId());
+            session.setAttribute("userId", userId);
         } catch (IllegalStateException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "member/join";
@@ -86,7 +83,7 @@ public class UserController {
         String address = joinLocationDto.getAddress();
 
         // Get userId
-        Long userId = joinLocationDto.getUserId().getId();
+        Long userId = (Long)session.getAttribute("userId");
 
         // Delegate the saving logic to the UserService
         userService.saveUserLocation(userId, latitude, longitude, address);

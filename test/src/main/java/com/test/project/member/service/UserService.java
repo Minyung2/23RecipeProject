@@ -1,16 +1,13 @@
 package com.test.project.member.service;
 
-import com.test.project.member.dto.JoinDto;
 import com.test.project.member.entity.User;
 import com.test.project.member.entity.UserLocation;
 import com.test.project.member.repository.UserLocationRepository;
 import com.test.project.member.repository.UserRepository;
-import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,13 +18,14 @@ public class UserService implements UserDetailsService {
     private UserLocationRepository userLocationRepository;
 
 
-    public User saveMember(User user){
+    public User saveUser(User user){
         validateDuplicateMember(user);
         return userRepository.save(user);
     }
-    public User saveUserAndGetUser(JoinDto joinDto, PasswordEncoder passwordEncoder) {
-        User user = User.saveUser(joinDto, passwordEncoder);
-        return saveMember(user);
+
+    public Long getUserId(String email){
+        User user = userRepository.findByEmail(email);
+        return user.getId();
     }
 
     private void validateDuplicateMember(User user){
@@ -48,6 +46,11 @@ public class UserService implements UserDetailsService {
         userLocation.setUser(user);
 
         userLocationRepository.save(userLocation);
+    }
+
+    public boolean userHasLocation(Long userId){
+        long count = userLocationRepository.countByUserId(userId);
+        return count > 0;
     }
 
     @Override

@@ -24,21 +24,15 @@
             <span id="centerAddr"></span>
         </div>
         <div id="menu_wrap" class="bg_white">
-            <div class="option">
-                <div>
-                    <form onsubmit="searchPlaces(); return false;">
-                        키워드 : <input type="text" id="keyword" size="15">
-                        <button type="submit">검색하기</button>
-                    </form>
-                </div>
-            </div>
-            <hr>
-            <ul id="placesList"></ul>
-            <div id="pagination"></div>
+
         </div>
+
         <input type="submit" value="위치 찰칵">
     </div>
-
+        <input type="hidden" id="latitude"  name="latitude">
+        <input type="hidden" id="longitude"  name="longitude">
+        <input type="hidden" id="address" name="address">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>
 
 </div>

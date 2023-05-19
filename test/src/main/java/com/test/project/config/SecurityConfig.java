@@ -2,6 +2,7 @@ package com.test.project.config;
 
 import com.test.project.member.dto.JoinDto;
 import com.test.project.member.service.CustomOAuth2UserService;
+import com.test.project.member.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -28,7 +31,8 @@ public class SecurityConfig {
 
     @Autowired
     private CustomOAuth2UserService customOAuth2UserService;
-
+    @Autowired
+    private UserService userService;
 
 
 
@@ -95,8 +99,8 @@ public class SecurityConfig {
                 }
 
                 response.sendRedirect("/join");
-            } else {
-                response.sendRedirect("/"); // Or whatever your default success URL is
+            } else{
+                response.sendRedirect("/loginSuccess");
             }
         };
     }

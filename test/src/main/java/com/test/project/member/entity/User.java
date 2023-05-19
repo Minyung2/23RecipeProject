@@ -5,11 +5,7 @@ import com.test.project.member.constant.Role;
 import com.test.project.member.dto.JoinDto;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Table(name="user")
@@ -48,8 +44,7 @@ public class User {
     @Column(nullable = false, name = "gender")
     private String gender;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserLocation> userLocations = new ArrayList<>();
+
 
     public User update(String name, String email, Role role, String ageRange, String mobile, String gender) {
         this.name = name;
